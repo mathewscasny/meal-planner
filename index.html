@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+.sticky-actions{position:sticky;top:0;background:var(--bg);z-index:10;padding:8px 0 4px;margin-bottom:6px;border-bottom:0.5px solid var(--border)}<!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8">
@@ -121,6 +121,8 @@ textarea{resize:none;line-height:1.5}
 .confirm-sheet.open{display:flex}
 .confirm-box{background:var(--bg);border-radius:20px 20px 0 0;width:100%;max-width:600px;padding:20px 20px calc(20px + env(safe-area-inset-bottom,0))}
 .confirm-box h3{font-size:17px;font-weight:600;margin-bottom:8px}
+.fsel{padding:7px 10px;border:0.5px solid var(--border-md);border-radius:var(--r);font-size:13px;background:var(--bg);color:var(--text);outline:none}
+.sticky-actions{position:sticky;top:0;background:var(--bg);z-index:10;padding:8px 0 4px;margin-bottom:6px;border-bottom:0.5px solid var(--border)}
 .confirm-box p{font-size:14px;color:var(--muted);margin-bottom:18px;line-height:1.5}
 
 /* Merge review */
@@ -253,6 +255,7 @@ let recipes = [];
 let checked = {};
 let activeRecipes = [];
 let currentTab = 'meals';
+let currentSort = 'aisle';
 let pendingMerge = null;
 let userMergeDecisions = {};
 
@@ -399,9 +402,12 @@ function parseIngredients(text) {
       .replace(/\s+(cooked|drained|thawed|rinsed|according to.*|to taste).*$/i,'')
       .replace(/\s{2,}/g,' ')            // collapse multiple spaces left by paren removal
       .trim().toLowerCase();
-    // If name is still more than 5 words, it likely has trailing brand/description text — trim it
+    // Strip brand name artifacts: after "or" in a name, cut anything that looks like a proper noun
+    // e.g. "pasta sauce or marinara ragu" → "pasta sauce or marinara"
+    name = name.replace(/\s+(ragu|rao|newman|prego|hunts|heinz|kraft|hellmann|barilla|ronzoni|classico|bertolli|campbells|progresso|swanson|kikkoman|lawry|mccormick|frank|tabasco|cholula|tapatio)\b.*/i, '');
+    // If name is still more than 6 words, trim to 5
     const nameWords = name.split(' ');
-    if (nameWords.length > 5) name = nameWords.slice(0, 5).join(' ');
+    if (nameWords.length > 6) name = nameWords.slice(0, 5).join(' ');
 
     // Remove leading "of "
     name = name.replace(/^of\s+/i,'').trim();
@@ -630,6 +636,7 @@ function renderList() {
   const grouped = {};
   items.forEach(item => { const k = item.aisle||'other'; if(!grouped[k])grouped[k]=[]; grouped[k].push(item); });
   const sortedGroups = Object.entries(grouped).sort(([a],[b]) => {
+    if (currentSort === 'alpha') return a.localeCompare(b);
     const ai = AISLE_ORDER.indexOf(a), bi = AISLE_ORDER.indexOf(b);
     if (ai===-1&&bi===-1) return a.localeCompare(b);
     if (ai===-1) return 1; if (bi===-1) return -1; return ai-bi;
@@ -638,12 +645,13 @@ function renderList() {
   let html = '';
 
   if (done.length > 1) {
+    html += '<div style="margin-bottom:10px"><div style="font-size:11px;font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:0.07em;margin-bottom:7px">Filter by recipe</div>';
     html += '<div class="recipe-chips">';
     html += `<button class="chip${activeRecipes.length===0?' on':''}" onclick="activeRecipes=[];renderList()">All recipes</button>`;
     done.forEach(r => {
       html += `<button class="chip${activeRecipes.includes(r.id)?' on':''}" onclick="toggleRecipeFilter('${r.id}')">${r.title}</button>`;
     });
-    html += '</div>';
+    html += '</div></div>';
   }
 
   if (!items.length) {
@@ -651,11 +659,16 @@ function renderList() {
   } else {
     html += `<div class="summary-row"><div class="pill"><b>${total}</b> items</div><div class="pill"><b>${filtered.length}</b> recipe${filtered.length!==1?'s':''}</div>${checkedN>0?`<div class="pill"><b>${checkedN}</b> checked</div>`:''}</div>`;
     html += `<div class="prog-wrap"><div class="prog-fill" style="width:${pct}%"></div></div>`;
+    html += '<div class="sticky-actions">';
     html += '<div class="list-actions">';
     if (checkedN > 0) html += `<button class="btn" onclick="checked={};saveLocal();renderList()"><i class="ti ti-refresh" aria-hidden="true"></i>Reset</button>`;
     html += `<button class="btn" onclick="window.print()"><i class="ti ti-printer" aria-hidden="true"></i>Print</button>`;
     html += `<button class="btn" onclick="exportCSV()"><i class="ti ti-download" aria-hidden="true"></i>CSV</button>`;
-    html += '</div>';
+    html += '<select class="fsel" onchange="setSortBy(this.value)">';
+    html += `<option value="aisle" ${currentSort==='aisle'?'selected':''}>Store order</option>`;
+    html += `<option value="alpha" ${currentSort==='alpha'?'selected':''}>A–Z</option>`;
+    html += '</select>';
+    html += '</div></div>';
 
     sortedGroups.forEach(([aisle, aisleItems]) => {
       const label = aisle.replace(/^aisle /i,'Aisle ').replace(/^./,c=>c.toUpperCase());
@@ -725,14 +738,18 @@ function toggleCheck(name) {
   saveLocal(); renderList();
 }
 
+function setSortBy(val) {
+  currentSort = val;
+  renderList();
+}
+
 function toggleRecipeFilter(id) {
-  const done = recipes.filter(r => r.ingredients && r.ingredients.length);
-  if (activeRecipes.includes(id)) {
-    activeRecipes = activeRecipes.filter(x => x !== id);
-    if (activeRecipes.length === done.length) activeRecipes = [];
+  if (activeRecipes.length === 1 && activeRecipes[0] === id) {
+    // Clicking the already-selected recipe → go back to All
+    activeRecipes = [];
   } else {
-    if (activeRecipes.length === 0) activeRecipes = done.map(r=>r.id).filter(x=>x!==id);
-    else { activeRecipes.push(id); if(activeRecipes.length===done.length) activeRecipes=[]; }
+    // Select just this recipe
+    activeRecipes = [id];
   }
   renderList();
 }
@@ -752,7 +769,7 @@ function render() { renderMeals(); if(currentTab==='list') renderList(); }
 
 // ── Service Worker ───────────────────────────────────────────────────────────
 if ('serviceWorker' in navigator) {
-  navigator.serviceWorker.register('./sw.js?v=3').catch(() => {});
+  navigator.serviceWorker.register('./sw.js?v=4').catch(() => {});
 }
 
 // ── Init ──────────────────────────────────────────────────────────────────────
