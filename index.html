@@ -135,6 +135,8 @@ textarea{resize:none;line-height:1.5}
 .merge-btn.chosen-no{background:var(--surface);border-color:var(--border-md);color:var(--text)}
 </style>
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css">
+<script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore-compat.js"></script>
 </head>
 <body>
 <div id="app">
@@ -482,6 +484,19 @@ function mergeIngredients(list) {
   });
 }
 
+// ── Firebase Setup ────────────────────────────────────────────────────────────
+const firebaseConfig = {
+  apiKey: "AIzaSyDa7-t6ZhoUYS131apyyyzjpr2NW3b8sf8",
+  authDomain: "meal-planner-bdcbe.firebaseapp.com",
+  projectId: "meal-planner-bdcbe",
+  storageBucket: "meal-planner-bdcbe.firebasestorage.app",
+  messagingSenderId: "923366938386",
+  appId: "1:923366938386:web:c22935ce625765404845cb"
+};
+firebase.initializeApp(firebaseConfig);
+const db = firebase.firestore();
+const DOC_REF = db.collection('planner').doc('shared');
+
 // ── Storage ───────────────────────────────────────────────────────────────────
 function setSyncStatus(state, msg) {
   const dot = document.getElementById('sync-dot');
@@ -504,6 +519,49 @@ function saveLocal() {
     localStorage.setItem(CHECKED_KEY, JSON.stringify(checked));
     localStorage.setItem(STORE_KEY, JSON.stringify(store));
   } catch(e) {}
+}
+
+async function saveToFirebase() {
+  setSyncStatus('saving', 'Syncing...');
+  try {
+    await DOC_REF.set({
+      recipes: JSON.stringify(recipes),
+      checked: JSON.stringify(checked),
+      updatedAt: firebase.firestore.FieldValue.serverTimestamp()
+    });
+    setSyncStatus('ok', 'Synced');
+    saveLocal();
+  } catch(e) {
+    console.error('Firebase save error:', e);
+    setSyncStatus('error', 'Sync failed — saved locally');
+    saveLocal();
+  }
+}
+
+function startRealtimeSync() {
+  DOC_REF.onSnapshot(snap => {
+    if (!snap.exists) return;
+    const data = snap.data();
+    if (!data) return;
+    try {
+      const remoteRecipes = JSON.parse(data.recipes || '[]');
+      const remoteChecked = JSON.parse(data.checked || '{}');
+      // Only update if data actually changed to avoid render loops
+      if (JSON.stringify(remoteRecipes) !== JSON.stringify(recipes) ||
+          JSON.stringify(remoteChecked) !== JSON.stringify(checked)) {
+        recipes = remoteRecipes;
+        checked = remoteChecked;
+        saveLocal();
+        render();
+        setSyncStatus('ok', 'Synced');
+      }
+    } catch(e) {
+      console.error('Sync parse error:', e);
+    }
+  }, err => {
+    console.error('Firestore listener error:', err);
+    setSyncStatus('error', 'Sync error — check connection');
+  });
 }
 
 // ── Extract ───────────────────────────────────────────────────────────────────
@@ -541,8 +599,7 @@ function handleExtract() {
 
 function addRecipe(recipe) {
   recipes.push(recipe);
-  saveLocal();
-  setSyncStatus('ok', 'Saved');
+  saveToFirebase();
   render();
 }
 
@@ -607,7 +664,7 @@ function saveStore() {
   store.aisleCtx = document.getElementById('s-ctx').value.trim();
   document.getElementById('store-name-display').textContent = store.name;
   document.getElementById('store-addr-display').textContent = store.address;
-  saveLocal();
+  saveLocal(); // store settings are local only
   closeStoreModal();
 }
 
@@ -616,7 +673,7 @@ function confirmClear() { document.getElementById('confirm-sheet').classList.add
 function cancelClear() { document.getElementById('confirm-sheet').classList.remove('open'); }
 function doClear() {
   recipes = []; checked = []; activeRecipes = [];
-  cancelClear(); saveLocal(); render();
+  cancelClear(); saveToFirebase(); render();
 }
 
 // ── Tabs ──────────────────────────────────────────────────────────────────────
@@ -669,7 +726,7 @@ function renderList() {
     html += `<div class="summary-row"><div class="pill"><b>${total}</b> items</div><div class="pill"><b>${filtered.length}</b> recipe${filtered.length!==1?'s':''}</div>${checkedN>0?`<div class="pill"><b>${checkedN}</b> checked</div>`:''}</div>`;
     html += `<div class="prog-wrap"><div class="prog-fill" style="width:${pct}%"></div></div>`;
     html += '<div class="list-actions">';
-    if (checkedN > 0) html += `<button class="btn" onclick="checked={};saveLocal();renderList()"><i class="ti ti-refresh" aria-hidden="true"></i>Reset</button>`;
+    if (checkedN > 0) html += `<button class="btn" onclick="checked={};saveToFirebase();renderList()"><i class="ti ti-refresh" aria-hidden="true"></i>Reset</button>`;
     html += `<button class="btn" onclick="window.print()"><i class="ti ti-printer" aria-hidden="true"></i>Print</button>`;
     html += `<button class="btn" onclick="exportCSV()"><i class="ti ti-download" aria-hidden="true"></i>CSV</button>`;
     html += '<select class="fsel" onchange="setSortBy(this.value)">';
@@ -738,12 +795,12 @@ function toggleCard(id) {
 function removeRecipe(id) {
   recipes = recipes.filter(r => r.id !== id);
   activeRecipes = activeRecipes.filter(x => x !== id);
-  saveLocal(); render();
+  saveToFirebase(); render();
 }
 
 function toggleCheck(name) {
   checked[name] = !checked[name];
-  saveLocal(); renderList();
+  saveToFirebase(); renderList();
 }
 
 function setSortBy(val) {
@@ -777,15 +834,35 @@ function render() { renderMeals(); if(currentTab==='list') renderList(); }
 
 // ── Service Worker ───────────────────────────────────────────────────────────
 if ('serviceWorker' in navigator) {
-  navigator.serviceWorker.register('./sw.js?v=5').catch(() => {});
+  navigator.serviceWorker.register('./sw.js?v=6').catch(() => {});
 }
 
 // ── Init ──────────────────────────────────────────────────────────────────────
+// Load local data first for instant startup, then sync from Firebase
 loadLocal();
 document.getElementById('store-name-display').textContent = store.name;
 document.getElementById('store-addr-display').textContent = store.address;
-setSyncStatus('ok', 'Ready');
+setSyncStatus('saving', 'Connecting...');
 render();
+
+// Load latest from Firebase, then start real-time listener
+DOC_REF.get().then(snap => {
+  if (snap.exists) {
+    const data = snap.data();
+    try {
+      recipes = JSON.parse(data.recipes || '[]');
+      checked = JSON.parse(data.checked || '{}');
+      saveLocal();
+      render();
+    } catch(e) {}
+  }
+  setSyncStatus('ok', 'Synced');
+  startRealtimeSync();
+}).catch(err => {
+  console.error('Initial load error:', err);
+  setSyncStatus('error', 'Offline — showing local data');
+  startRealtimeSync(); // still try to listen
+});
 </script>
 </body>
 </html>
