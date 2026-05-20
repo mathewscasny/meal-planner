@@ -388,15 +388,20 @@ function parseIngredients(text) {
     // Strip any leading punctuation left over from unit abbreviations like "lbs." or "tsp."
     line = line.replace(/^[.\s]+/, '').trim();
 
-    // Strip everything after comma, semicolon, or parenthesis — these are always instructions not ingredient names
-    // e.g. "penne pasta, cooked according to..." or "chicken (about 1 lb)"
+    // Strip everything after comma, semicolon, or parenthesis
+    // IMPORTANT: remove parentheticals FIRST (before comma cut) because some recipes
+    // have format: "Pasta Sauce or Marinara (two 24-oz. jars) Ragu, Rao's..." — no comma before paren
     let name = line
-      .replace(/,.*$/,'')           // cut at comma
-      .replace(/;.*$/,'')           // cut at semicolon
-      .replace(/\s*\([^)]*\)\s*/g,'') // remove parentheticals
-      .replace(/\s*-\s*(cooked|drained|thawed|rinsed|diced|sliced|chopped|minced|grated|shredded|softened|melted|room temp.*|to taste.*).*$/i,'') // cut instruction suffixes
-      .replace(/\s+(cooked|drained|thawed|rinsed|according to.*|to taste).*$/i,'') // cut more suffixes
+      .replace(/\s*\([^)]*\)\s*/g,' ') // remove parentheticals first (replace with space)
+      .replace(/,.*$/,'')                 // then cut at first comma
+      .replace(/;.*$/,'')                 // cut at semicolon
+      .replace(/\s*-\s*(cooked|drained|thawed|rinsed|diced|sliced|chopped|minced|grated|shredded|softened|melted|room temp.*|to taste.*).*$/i,'')
+      .replace(/\s+(cooked|drained|thawed|rinsed|according to.*|to taste).*$/i,'')
+      .replace(/\s{2,}/g,' ')            // collapse multiple spaces left by paren removal
       .trim().toLowerCase();
+    // If name is still more than 5 words, it likely has trailing brand/description text — trim it
+    const nameWords = name.split(' ');
+    if (nameWords.length > 5) name = nameWords.slice(0, 5).join(' ');
 
     // Remove leading "of "
     name = name.replace(/^of\s+/i,'').trim();
@@ -747,7 +752,7 @@ function render() { renderMeals(); if(currentTab==='list') renderList(); }
 
 // ── Service Worker ───────────────────────────────────────────────────────────
 if ('serviceWorker' in navigator) {
-  navigator.serviceWorker.register('./sw.js?v=2').catch(() => {});
+  navigator.serviceWorker.register('./sw.js?v=3').catch(() => {});
 }
 
 // ── Init ──────────────────────────────────────────────────────────────────────
