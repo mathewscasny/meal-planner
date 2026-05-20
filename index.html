@@ -1,4 +1,4 @@
-.sticky-actions{position:sticky;top:0;background:var(--bg);z-index:10;padding:8px 0 4px;margin-bottom:6px;border-bottom:0.5px solid var(--border)}<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8">
@@ -405,9 +405,16 @@ function parseIngredients(text) {
     // Strip brand name artifacts: after "or" in a name, cut anything that looks like a proper noun
     // e.g. "pasta sauce or marinara ragu" → "pasta sauce or marinara"
     name = name.replace(/\s+(ragu|rao|newman|prego|hunts|heinz|kraft|hellmann|barilla|ronzoni|classico|bertolli|campbells|progresso|swanson|kikkoman|lawry|mccormick|frank|tabasco|cholula|tapatio)\b.*/i, '');
-    // If name is still more than 6 words, trim to 5
+    // Trim long names
     const nameWords = name.split(' ');
-    if (nameWords.length > 6) name = nameWords.slice(0, 5).join(' ');
+    // Names with 'or' suggesting alternatives (e.g. "pasta sauce or marinara ragu") — keep up to the 'or' clause
+    const orIdx = nameWords.indexOf('or');
+    if (orIdx !== -1 && nameWords.length > orIdx + 2) {
+      // Keep "X or Y" — just the word after "or", drop anything beyond
+      name = nameWords.slice(0, orIdx + 2).join(' ');
+    } else if (nameWords.length > 5) {
+      name = nameWords.slice(0, 5).join(' ');
+    }
 
     // Remove leading "of "
     name = name.replace(/^of\s+/i,'').trim();
@@ -644,14 +651,16 @@ function renderList() {
 
   let html = '';
 
+  // Sticky header — includes filter chips (if multiple recipes) + action buttons
+  html += '<div class="sticky-actions">';
   if (done.length > 1) {
-    html += '<div style="margin-bottom:10px"><div style="font-size:11px;font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:0.07em;margin-bottom:7px">Filter by recipe</div>';
-    html += '<div class="recipe-chips">';
+    html += '<div style="font-size:11px;font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:0.07em;margin-bottom:7px">Filter by recipe</div>';
+    html += '<div class="recipe-chips" style="margin-bottom:10px">';
     html += `<button class="chip${activeRecipes.length===0?' on':''}" onclick="activeRecipes=[];renderList()">All recipes</button>`;
     done.forEach(r => {
       html += `<button class="chip${activeRecipes.includes(r.id)?' on':''}" onclick="toggleRecipeFilter('${r.id}')">${r.title}</button>`;
     });
-    html += '</div></div>';
+    html += '</div>';
   }
 
   if (!items.length) {
@@ -659,7 +668,6 @@ function renderList() {
   } else {
     html += `<div class="summary-row"><div class="pill"><b>${total}</b> items</div><div class="pill"><b>${filtered.length}</b> recipe${filtered.length!==1?'s':''}</div>${checkedN>0?`<div class="pill"><b>${checkedN}</b> checked</div>`:''}</div>`;
     html += `<div class="prog-wrap"><div class="prog-fill" style="width:${pct}%"></div></div>`;
-    html += '<div class="sticky-actions">';
     html += '<div class="list-actions">';
     if (checkedN > 0) html += `<button class="btn" onclick="checked={};saveLocal();renderList()"><i class="ti ti-refresh" aria-hidden="true"></i>Reset</button>`;
     html += `<button class="btn" onclick="window.print()"><i class="ti ti-printer" aria-hidden="true"></i>Print</button>`;
@@ -668,7 +676,7 @@ function renderList() {
     html += `<option value="aisle" ${currentSort==='aisle'?'selected':''}>Store order</option>`;
     html += `<option value="alpha" ${currentSort==='alpha'?'selected':''}>A–Z</option>`;
     html += '</select>';
-    html += '</div></div>';
+    html += '</div></div>'; // closes list-actions + sticky-actions
 
     sortedGroups.forEach(([aisle, aisleItems]) => {
       const label = aisle.replace(/^aisle /i,'Aisle ').replace(/^./,c=>c.toUpperCase());
@@ -769,7 +777,7 @@ function render() { renderMeals(); if(currentTab==='list') renderList(); }
 
 // ── Service Worker ───────────────────────────────────────────────────────────
 if ('serviceWorker' in navigator) {
-  navigator.serviceWorker.register('./sw.js?v=4').catch(() => {});
+  navigator.serviceWorker.register('./sw.js?v=5').catch(() => {});
 }
 
 // ── Init ──────────────────────────────────────────────────────────────────────
