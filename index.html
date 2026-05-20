@@ -297,16 +297,28 @@ const AISLE_MAP = {
   'aisle 4':['olive oil','vinegar','salad dressing','ketchup','mustard','mayonnaise','mayo','pickle','olives','jam','jelly','peanut butter','honey','bbq sauce','salsa','hot sauce','worcestershire','soy sauce','fish sauce','oyster sauce','sriracha','tahini','capers'],
   'aisle 5':['pasta','spaghetti','fettuccine','penne','rigatoni','rice','lentils','quinoa','couscous','noodles','ramen','mac and cheese'],
   'aisle 6':['canned tomatoes','tomato paste','tomato sauce','broth','chicken broth','beef broth','vegetable broth','coconut milk','chickpeas','black beans'],
-  'aisle 8':['flour','sugar','brown sugar','salt','baking soda','baking powder','oil','pepper','red pepper flakes','chili flakes','cumin','paprika','oregano','thyme','rosemary','cinnamon','chili powder','garlic powder','onion powder','cayenne','bay leaves','italian seasoning','cornstarch','breadcrumbs','panko','vanilla','yeast'],
+  'aisle 8':['flour','sugar','brown sugar','salt','pepper','black pepper','red pepper flakes','chili flakes','baking soda','baking powder','oil','cumin','paprika','oregano','thyme','rosemary','cinnamon','chili powder','garlic powder','onion powder','cayenne','bay leaves','italian seasoning','cornstarch','breadcrumbs','panko','vanilla','yeast'],
   'aisle 9':['chips','popcorn','nuts','pretzels','crackers','granola'],
   'aisle 10':['coffee','tea','hot cocoa','creamer','juice','almond milk','oat milk','soy milk'],
   'aisle 24':['soda','sparkling water','water'],
 };
 
 function getAisle(name) {
-  const l = name.toLowerCase();
+  const l = name.toLowerCase().trim();
+  // Exact match first
   for (const [aisle, kws] of Object.entries(AISLE_MAP)) {
-    if (kws.some(k => l === k || l.includes(k) || k.includes(l))) return aisle;
+    if (kws.includes(l)) return aisle;
+  }
+  // Then partial match — but skip single short words to avoid false matches
+  // e.g. "pepper" should not match "bell pepper" in produce
+  for (const [aisle, kws] of Object.entries(AISLE_MAP)) {
+    if (kws.some(k => {
+      if (k === l) return true;
+      // Only match if the keyword is multi-word or name is multi-word
+      if (k.includes(' ') && l.includes(k)) return true;
+      if (l.includes(' ') && k.includes(l)) return true;
+      return false;
+    })) return aisle;
   }
   return 'other';
 }
@@ -381,7 +393,7 @@ function parseIngredients(text) {
     let name = line
       .replace(/,.*$/,'')           // cut at comma
       .replace(/;.*$/,'')           // cut at semicolon
-      .replace(/\s*\(.*?\)\s*/g,'') // remove parentheticals
+      .replace(/\s*\([^)]*\)\s*/g,'') // remove parentheticals
       .replace(/\s*-\s*(cooked|drained|thawed|rinsed|diced|sliced|chopped|minced|grated|shredded|softened|melted|room temp.*|to taste.*).*$/i,'') // cut instruction suffixes
       .replace(/\s+(cooked|drained|thawed|rinsed|according to.*|to taste).*$/i,'') // cut more suffixes
       .trim().toLowerCase();
@@ -390,7 +402,10 @@ function parseIngredients(text) {
     name = name.replace(/^of\s+/i,'').trim();
 
     // Remove leading adjectives (but keep the noun)
-    name = name.replace(/^(fresh|dried|frozen|canned|cooked|raw|large|medium|small|extra-large|extra large|extra|finely|roughly|thinly|chopped|minced|sliced|diced|grated|shredded|boneless|skinless|lean|whole|ground|uncooked|dry|prepared)\s+/gi,'').trim();
+    // Strip multiple leading adjectives iteratively
+    const adjectives = /^(fresh|dried|frozen|canned|cooked|raw|large|medium|small|extra-large|extra large|extra|finely|roughly|thinly|chopped|minced|sliced|diced|grated|shredded|boneless|skinless|lean|whole|ground|uncooked|dry|prepared|halved|quartered|peeled|seeded|trimmed|divided|optional|packed)\s+/gi;
+    let prev = '';
+    while (prev !== name) { prev = name; name = name.replace(adjectives, '').trim(); }
 
     if (!name || name.length < 2) continue;
     name = normName(name);
@@ -732,7 +747,7 @@ function render() { renderMeals(); if(currentTab==='list') renderList(); }
 
 // ── Service Worker ───────────────────────────────────────────────────────────
 if ('serviceWorker' in navigator) {
-  navigator.serviceWorker.register('./sw.js').catch(() => {});
+  navigator.serviceWorker.register('./sw.js?v=2').catch(() => {});
 }
 
 // ── Init ──────────────────────────────────────────────────────────────────────
