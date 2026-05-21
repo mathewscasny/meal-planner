@@ -74,10 +74,10 @@ textarea{resize:none;line-height:1.5}
 .filter-chip .clear-x{font-size:13px;margin-left:2px;opacity:0.7}
 /* Dropdown */
 .dropdown-wrap{position:relative;flex-shrink:0}
-.dropdown-menu{display:none;position:absolute;top:calc(100% + 6px);left:0;min-width:160px;background:var(--bg);border:0.5px solid var(--bdm);border-radius:var(--rl);box-shadow:0 8px 24px rgba(0,0,0,0.15);z-index:50;overflow:hidden}
+.dropdown-menu{display:none;position:fixed;min-width:160px;background:var(--bg);border:0.5px solid var(--bdm);border-radius:var(--rl);box-shadow:0 8px 32px rgba(0,0,0,0.2);z-index:500;overflow:hidden;max-height:280px;overflow-y:auto}
 .dropdown-menu.open{display:block}
-.dropdown-item{padding:10px 14px;font-size:14px;cursor:pointer;display:flex;align-items:center;gap:8px;color:var(--tx)}
-.dropdown-item:hover{background:var(--sf)}
+.dropdown-item{padding:11px 14px;font-size:14px;cursor:pointer;display:flex;align-items:center;gap:8px;color:var(--tx);-webkit-tap-highlight-color:transparent}
+.dropdown-item:active{background:var(--sf)}
 .dropdown-item.selected{color:var(--ac);font-weight:500}
 .dropdown-item.selected::after{content:'✓';margin-left:auto}
 
@@ -772,13 +772,30 @@ function closeAllDropdowns(){
   openDropdown=null;
 }
 document.addEventListener('click',e=>{
-  if(!e.target.closest('.dropdown-wrap'))closeAllDropdowns();
+  // Close dropdowns when clicking outside
+  if(!e.target.closest('.dropdown-wrap')&&!e.target.closest('.dropdown-menu')){
+    closeAllDropdowns();
+  }
 });
-function toggleDropdown(id){
+function toggleDropdown(id,btnEl){
   const menu=document.getElementById(id);
   if(menu.classList.contains('open')){closeAllDropdowns();return;}
   closeAllDropdowns();
-  menu.classList.add('open');openDropdown=id;
+  // Position the dropdown below the button using fixed positioning
+  if(btnEl){
+    const rect=btnEl.getBoundingClientRect();
+    menu.style.top=(rect.bottom+4)+'px';
+    menu.style.left=rect.left+'px';
+    // Make sure it doesn't go off-screen to the right
+    requestAnimationFrame(()=>{
+      const mRect=menu.getBoundingClientRect();
+      if(mRect.right>window.innerWidth-8){
+        menu.style.left=(window.innerWidth-8-mRect.width)+'px';
+      }
+    });
+  }
+  menu.classList.add('open');
+  openDropdown=id;
 }
 
 // ── Library render ────────────────────────────────────────────────────────────
@@ -797,7 +814,7 @@ function renderLibraryFilterBar(){
     const active=libFilter[cat];
     const chipId='dd-lib-'+cat;
     html+=`<div class="dropdown-wrap">
-      <button class="filter-chip${active?' active':''}" onclick="toggleDropdown('${chipId}')">
+      <button class="filter-chip${active?' active':''}" onclick=\"toggleDropdown('${chipId}',this)\">
         ${active?active:lbl}<i class="ti ti-chevron-down" aria-hidden="true"></i>
       </button>
       <div class="dropdown-menu" id="${chipId}">
@@ -858,7 +875,7 @@ function renderExtrasFilterBar(){
   const cats=[...new Set(extraItems.map(i=>i.cat))].sort();
   const ddId='dd-extras-cat';
   html+=`<div class="dropdown-wrap">
-    <button class="filter-chip${extrasFilter?' active':''}" onclick="toggleDropdown('${ddId}')">
+    <button class="filter-chip${extrasFilter?' active':''}" onclick=\"toggleDropdown('${ddId}',this)\">
       ${extrasFilter||'Category'}<i class="ti ti-chevron-down" aria-hidden="true"></i>
     </button>
     <div class="dropdown-menu" id="${ddId}">
@@ -1030,7 +1047,7 @@ function renderList(){
 
   let html='<div class="sticky-hdr">';
   // Filter chips
-  const allSources=[...shoppingList,additionalItems.length?{id:'__extras__',title:'Additional Items'}:null].filter(Boolean);
+  const allSources=[...shoppingList,...(additionalItems.length>0?[{id:'__extras__',title:'Additional Items'}]:[])];
   if(allSources.length>1){
     html+='<div class="filter-bar" style="margin-bottom:7px">';
     html+=`<button class="filter-chip${activeListFilter.length===0?' active':''}" onclick="activeListFilter=[];renderList()">All</button>`;
@@ -1050,41 +1067,51 @@ function renderList(){
   html+=`<div class="summary-row"><div class="pill"><b>${total}</b> items</div><div class="pill"><b>${shoppingList.length}</b> recipe${shoppingList.length!==1?'s':''}</div>${checkedN>0?`<div class="pill"><b>${checkedN}</b> checked</div>`:''}</div>`;
   html+=`<div class="prog-wrap"><div class="prog-fill" style="width:${pct}%"></div></div>`;
 
-  // Recipe ingredients grouped by aisle
-  if(recipeItems.length>0){
-    sortedGroups.forEach(([aisle,aisleItems])=>{
-      const lbl=aisle.replace(/^./,c=>c.toUpperCase()).replace('aisle ','Aisle ');
-      html+=`<div class="aisle-sec"><div class="aisle-hdr"><span class="aisle-badge">${lbl}</span><span style="font-size:11px;color:var(--hi)">${aisleItems.length}</span></div>`;
-      aisleItems.forEach(item=>{
-        const ck=checked[item.name];
-        const ns=item.name.replace(/'/g,"\\'");
-        html+=`<div class="shop-item${ck?' done':''}">
-          <div class="chk${ck?' on':''}" onclick="toggleCheck('${ns}',false)"></div>
-          <span class="iname">${item.name}</span>
-          ${fmtAmt(item.displayAmt,item.displayUnit)?`<span class="iamt">${fmtAmt(item.displayAmt,item.displayUnit)}</span>`:''}
-          ${item.sources.length>1?`<span style="font-size:11px;color:var(--hi);margin-left:2px">x${item.sources.length}</span>`:''}
-        </div>`;
-      });
-      html+='</div>';
+  // Merge recipe items and extras into unified aisle groups
+  const extraGrouped={};
+  if(showAdditional&&additionalItems.length>0){
+    additionalItems.forEach(item=>{
+      const aisle=item.aisle||getAisle(item.name)||'other';
+      if(!extraGrouped[aisle])extraGrouped[aisle]=[];
+      extraGrouped[aisle].push(item);
     });
   }
-
-  // Additional items section
-  if(showAdditional&&additionalItems.length>0){
-    html+=`<div class="aisle-sec"><div class="aisle-hdr"><span class="aisle-badge" style="background:rgba(100,100,255,0.1);border-color:rgba(100,100,255,0.3);color:#4444cc">Additional Items</span><span style="font-size:11px;color:var(--hi)">${additionalItems.length}</span></div>`;
-    additionalItems.forEach(item=>{
+  const allGroupKeys=[...new Set([...Object.keys(grouped),...Object.keys(extraGrouped)])];
+  const allSortedGroups=allGroupKeys.sort((a,b)=>{
+    if(currentSort==='alpha')return a.localeCompare(b);
+    const ai=AISLE_ORDER.indexOf(a),bi=AISLE_ORDER.indexOf(b);
+    if(ai===-1&&bi===-1)return a.localeCompare(b);if(ai===-1)return 1;if(bi===-1)return -1;return ai-bi;
+  });
+  allSortedGroups.forEach(aisle=>{
+    const rItems=grouped[aisle]||[];
+    const eItems=extraGrouped[aisle]||[];
+    if(!rItems.length&&!eItems.length)return;
+    const lbl=aisle.replace(/^./,c=>c.toUpperCase()).replace('aisle ','Aisle ');
+    html+=`<div class="aisle-sec"><div class="aisle-hdr"><span class="aisle-badge">${lbl}</span><span style="font-size:11px;color:var(--hi)">${rItems.length+eItems.length}</span></div>`;
+    rItems.forEach(item=>{
+      const ck=checked[item.name];
+      const ns=item.name.replace(/'/g,"\\'");
+      html+=`<div class="shop-item${ck?' done':''}">
+        <div class="chk${ck?' on':''}" onclick="toggleCheck('${ns}')"></div>
+        <span class="iname">${item.name}</span>
+        ${fmtAmt(item.displayAmt,item.displayUnit)?`<span class="iamt">${fmtAmt(item.displayAmt,item.displayUnit)}</span>`:''}
+        ${item.sources.length>1?`<span style="font-size:11px;color:var(--hi);margin-left:2px">x${item.sources.length}</span>`:''}
+      </div>`;
+    });
+    eItems.forEach(item=>{
       const key='__extra__'+item.name;
       const ck=checked[key];
       const amtStr=item.amount?fmtAmt(String(item.amount),item.unit):'';
       const ns=item.name.replace(/'/g,"\\'");
       html+=`<div class="shop-item${ck?' done':''}">
-        <div class="chk${ck?' on':''}" onclick="toggleCheck('__extra__${ns}',false)"></div>
+        <div class="chk${ck?' on':''}" onclick="toggleCheck('__extra__${ns}')"></div>
         <span class="iname">${item.name}</span>
         ${amtStr?`<span class="iamt">${amtStr}</span>`:''}
+        <span style="font-size:10px;color:var(--hi);background:var(--sf);border-radius:10px;padding:1px 6px;flex-shrink:0">extra</span>
       </div>`;
     });
     html+='</div>';
-  }
+  });
 
   document.getElementById('list-pane-inner').innerHTML=html;
 }
@@ -1112,7 +1139,7 @@ function exportCSV(){
 }
 
 // ── Init ──────────────────────────────────────────────────────────────────────
-if('serviceWorker' in navigator)navigator.serviceWorker.register('./sw.js?v=8').catch(()=>{});
+if('serviceWorker' in navigator)navigator.serviceWorker.register('./sw.js?v=9').catch(()=>{});
 try{const s=localStorage.getItem('mp-store');if(s)Object.assign(store,JSON.parse(s));}catch(e){}
 try{const c=localStorage.getItem('mp-checked');if(c)checked=JSON.parse(c);}catch(e){}
 document.getElementById('store-name-display').textContent=store.name;
