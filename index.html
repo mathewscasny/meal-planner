@@ -17,21 +17,21 @@
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
 :root{
-  --bg:#fff;--surface:#f4f3ef;--border:rgba(0,0,0,0.1);--border-md:rgba(0,0,0,0.2);
-  --text:#1a1a1a;--muted:#666;--hint:#999;
-  --accent:#1D9E75;--al:#E1F5EE;--ad:#085041;
-  --danger:#c0392b;--dbg:#fdf2f2;
+  --bg:#fff;--sf:#f4f3ef;--bd:rgba(0,0,0,0.1);--bdm:rgba(0,0,0,0.2);
+  --tx:#1a1a1a;--mu:#666;--hi:#999;
+  --ac:#1D9E75;--al:#E1F5EE;--ad:#085041;
+  --dn:#c0392b;--db:#fdf2f2;
   --r:10px;--rl:14px;
 }
 @media(prefers-color-scheme:dark){
-  :root{--bg:#1e1e1e;--surface:#2a2a2a;--border:rgba(255,255,255,0.1);--border-md:rgba(255,255,255,0.2);--text:#f0efe9;--muted:#aaa;--hint:#666;--al:rgba(29,158,117,0.18);--ad:#9FE1CB;--dbg:rgba(192,57,43,0.15);}
+  :root{--bg:#1e1e1e;--sf:#2a2a2a;--bd:rgba(255,255,255,0.1);--bdm:rgba(255,255,255,0.2);--tx:#f0efe9;--mu:#aaa;--hi:#666;--al:rgba(29,158,117,0.18);--ad:#9FE1CB;--db:rgba(192,57,43,0.15);}
 }
-html,body{height:100%;background:var(--surface)}
-body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',system-ui,sans-serif;color:var(--text);overscroll-behavior:none}
+html,body{height:100%;background:var(--sf)}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',system-ui,sans-serif;color:var(--tx);overscroll-behavior:none}
 input,textarea,button,select{font-family:inherit}
 button{cursor:pointer}
 #app{display:flex;flex-direction:column;height:100vh;height:100dvh;max-width:600px;margin:0 auto;background:var(--bg);box-shadow:0 0 40px rgba(0,0,0,0.08)}
-#topbar{background:var(--accent);color:#fff;padding:env(safe-area-inset-top,0) 16px 0;flex-shrink:0}
+#topbar{background:var(--ac);color:#fff;padding:env(safe-area-inset-top,0) 16px 0;flex-shrink:0}
 #topbar-inner{display:flex;align-items:center;gap:10px;height:56px}
 #topbar h1{flex:1;font-size:18px;font-weight:600;letter-spacing:-0.3px}
 #sync-indicator{display:flex;align-items:center;gap:5px;font-size:11px;opacity:0.85}
@@ -39,102 +39,125 @@ button{cursor:pointer}
 #sync-dot.saving{animation:pulse 1s infinite}
 #sync-dot.error{background:#FAC775}
 @keyframes pulse{0%,100%{opacity:1}50%{opacity:0.3}}
-#content{flex:1;overflow-y:auto;-webkit-overflow-scrolling:touch;padding:14px 14px calc(80px + env(safe-area-inset-bottom,0))}
-#bottom-nav{background:var(--bg);border-top:0.5px solid var(--border);display:flex;padding-bottom:env(safe-area-inset-bottom,0);flex-shrink:0}
-.nav-btn{flex:1;display:flex;flex-direction:column;align-items:center;gap:3px;padding:10px 0;border:none;background:transparent;color:var(--muted);font-size:10px;font-weight:500;transition:color 0.15s;-webkit-tap-highlight-color:transparent}
-.nav-btn i{font-size:22px}
-.nav-btn.active{color:var(--accent)}
-.lbl{font-size:11px;font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:0.07em;margin-bottom:6px}
-input[type=text],textarea,select{width:100%;padding:10px 12px;border:0.5px solid var(--border-md);border-radius:var(--r);font-size:14px;background:var(--bg);color:var(--text);outline:none;-webkit-appearance:none;appearance:none}
-input[type=text]:focus,textarea:focus,select:focus{border-color:var(--accent);box-shadow:0 0 0 3px rgba(29,158,117,0.12)}
+#content{flex:1;overflow-y:auto;-webkit-overflow-scrolling:touch;padding:14px 14px calc(72px + env(safe-area-inset-bottom,0))}
+#bottom-nav{background:var(--bg);border-top:0.5px solid var(--bd);display:flex;padding-bottom:env(safe-area-inset-bottom,0);flex-shrink:0}
+.nav-btn{flex:1;display:flex;flex-direction:column;align-items:center;gap:3px;padding:9px 0;border:none;background:transparent;color:var(--mu);font-size:10px;font-weight:500;transition:color 0.15s;-webkit-tap-highlight-color:transparent}
+.nav-btn i{font-size:20px}
+.nav-btn.active{color:var(--ac)}
+/* Forms */
+.lbl{font-size:11px;font-weight:600;color:var(--mu);text-transform:uppercase;letter-spacing:0.07em;margin-bottom:5px}
+input[type=text],textarea,select{width:100%;padding:10px 12px;border:0.5px solid var(--bdm);border-radius:var(--r);font-size:14px;background:var(--bg);color:var(--tx);outline:none;-webkit-appearance:none}
+input[type=text]:focus,textarea:focus,select:focus{border-color:var(--ac);box-shadow:0 0 0 3px rgba(29,158,117,0.12)}
 textarea{resize:none;line-height:1.5}
-.field{margin-bottom:12px}
-.field label{display:block;font-size:12px;font-weight:500;color:var(--muted);margin-bottom:4px}
+.field{margin-bottom:11px}
+.field label{display:block;font-size:12px;font-weight:500;color:var(--mu);margin-bottom:4px}
 .grid-2{display:grid;grid-template-columns:1fr 1fr;gap:10px}
-.grid-3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px}
-.btn{padding:10px 16px;border-radius:var(--r);font-size:13px;font-weight:500;border:0.5px solid var(--border-md);background:var(--bg);color:var(--text);display:inline-flex;align-items:center;gap:6px;transition:all 0.15s;-webkit-tap-highlight-color:transparent;white-space:nowrap}
+/* Buttons */
+.btn{padding:10px 15px;border-radius:var(--r);font-size:13px;font-weight:500;border:0.5px solid var(--bdm);background:var(--bg);color:var(--tx);display:inline-flex;align-items:center;gap:6px;transition:all 0.15s;-webkit-tap-highlight-color:transparent;white-space:nowrap}
 .btn:active{transform:scale(0.97)}
-.btn.primary{background:var(--accent);border-color:var(--ad);color:#fff}
-.btn.primary:hover{background:#178a65}
-.btn.danger{border-color:var(--danger);color:var(--danger)}
+.btn.primary{background:var(--ac);border-color:var(--ad);color:#fff}
+.btn.danger{border-color:var(--dn);color:var(--dn)}
 .btn.sm{padding:6px 11px;font-size:12px}
 .btn:disabled{opacity:0.4;cursor:not-allowed}
 .btn-row{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px}
 .btn-full{width:100%;justify-content:center;padding:13px}
-.empty{text-align:center;padding:3rem 1rem;color:var(--hint)}
+.empty{text-align:center;padding:3rem 1rem;color:var(--hi)}
 .empty i{font-size:40px;display:block;margin-bottom:12px}
 .empty p{font-size:14px;line-height:1.6}
-.section-hdr{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px}
-.section-hdr h2{font-size:15px;font-weight:600}
 
-/* Recipe cards in library */
-.recipe-card{background:var(--bg);border:0.5px solid var(--border);border-radius:var(--rl);margin-bottom:10px;overflow:hidden}
-.rc-head{padding:12px 14px;display:flex;align-items:center;gap:10px}
-.rc-check{width:22px;height:22px;border:2px solid var(--border-md);border-radius:6px;flex-shrink:0;display:flex;align-items:center;justify-content:center;cursor:pointer;transition:all 0.15s}
-.rc-check.on{background:var(--accent);border-color:var(--accent)}
+/* ── Amazon-style filter bar ── */
+.filter-bar{display:flex;gap:6px;overflow-x:auto;padding:0 0 6px;margin-bottom:10px;scrollbar-width:none;align-items:center}
+.filter-bar::-webkit-scrollbar{display:none}
+.filter-chip{display:inline-flex;align-items:center;gap:4px;padding:6px 11px;border-radius:20px;font-size:12px;font-weight:500;border:0.5px solid var(--bdm);background:var(--bg);color:var(--mu);white-space:nowrap;-webkit-tap-highlight-color:transparent;flex-shrink:0}
+.filter-chip.active{background:var(--al);border-color:rgba(29,158,117,0.5);color:var(--ad)}
+.filter-chip i{font-size:11px}
+.filter-chip .clear-x{font-size:13px;margin-left:2px;opacity:0.7}
+/* Dropdown */
+.dropdown-wrap{position:relative;flex-shrink:0}
+.dropdown-menu{display:none;position:absolute;top:calc(100% + 6px);left:0;min-width:160px;background:var(--bg);border:0.5px solid var(--bdm);border-radius:var(--rl);box-shadow:0 8px 24px rgba(0,0,0,0.15);z-index:50;overflow:hidden}
+.dropdown-menu.open{display:block}
+.dropdown-item{padding:10px 14px;font-size:14px;cursor:pointer;display:flex;align-items:center;gap:8px;color:var(--tx)}
+.dropdown-item:hover{background:var(--sf)}
+.dropdown-item.selected{color:var(--ac);font-weight:500}
+.dropdown-item.selected::after{content:'✓';margin-left:auto}
+
+/* Recipe cards */
+.recipe-card{background:var(--bg);border:0.5px solid var(--bd);border-radius:var(--rl);margin-bottom:9px;overflow:hidden}
+.rc-head{padding:11px 13px;display:flex;align-items:center;gap:9px}
+.rc-check{width:22px;height:22px;border:2px solid var(--bdm);border-radius:6px;flex-shrink:0;display:flex;align-items:center;justify-content:center;cursor:pointer;transition:all 0.15s}
+.rc-check.on{background:var(--ac);border-color:var(--ac)}
 .rc-check.on::after{content:'';display:block;width:11px;height:7px;border-left:2.5px solid #fff;border-bottom:2.5px solid #fff;transform:rotate(-45deg) translate(1px,-1px)}
 .rc-info{flex:1;min-width:0}
-.rc-title{font-size:15px;font-weight:500;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.rc-meta{display:flex;flex-wrap:wrap;gap:4px;margin-top:5px}
-.meta-tag{background:var(--surface);border:0.5px solid var(--border);border-radius:20px;padding:2px 8px;font-size:11px;color:var(--muted)}
-.rc-actions{display:flex;gap:6px;flex-shrink:0}
-.rc-body{padding:0 14px 12px;border-top:0.5px solid var(--border)}
-.notes-text{font-size:13px;color:var(--muted);padding-top:10px;line-height:1.5}
-.tag-wrap{display:flex;flex-wrap:wrap;gap:5px;padding-top:10px}
-.tag{background:var(--surface);border:0.5px solid var(--border);border-radius:20px;padding:3px 9px;font-size:12px}
+.rc-title{font-size:14px;font-weight:500;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.rc-meta{display:flex;flex-wrap:wrap;gap:4px;margin-top:4px}
+.meta-tag{background:var(--sf);border:0.5px solid var(--bd);border-radius:20px;padding:2px 7px;font-size:11px;color:var(--mu)}
+.rc-actions{display:flex;gap:5px;flex-shrink:0}
+.rc-body{padding:0 13px 11px;border-top:0.5px solid var(--bd)}
+.notes-text{font-size:13px;color:var(--mu);padding-top:9px;line-height:1.5}
 
-/* Filter chips */
-.filter-row{display:flex;gap:6px;overflow-x:auto;padding-bottom:4px;margin-bottom:12px;scrollbar-width:none}
-.filter-row::-webkit-scrollbar{display:none}
-.chip{padding:6px 12px;border-radius:20px;font-size:12px;font-weight:500;border:0.5px solid var(--border-md);background:var(--bg);color:var(--muted);cursor:pointer;white-space:nowrap;-webkit-tap-highlight-color:transparent;transition:all 0.15s;flex-shrink:0}
-.chip.on{background:var(--al);border-color:rgba(29,158,117,0.4);color:var(--ad)}
+/* Extras items */
+.extra-item{display:flex;align-items:center;gap:9px;padding:10px 12px;background:var(--bg);border:0.5px solid var(--bd);border-radius:var(--r);margin-bottom:4px}
+.extra-item .iname{flex:1;font-size:14px}
+.extra-item .icat{font-size:11px;color:var(--mu);background:var(--sf);border-radius:20px;padding:2px 7px;white-space:nowrap}
 
 /* Shopping list */
-.sticky-actions{position:sticky;top:0;background:var(--bg);z-index:10;padding:8px 0 6px;margin-bottom:6px;border-bottom:0.5px solid var(--border)}
-.list-actions{display:flex;gap:7px;flex-wrap:wrap;align-items:center}
-.fsel{padding:7px 10px;border:0.5px solid var(--border-md);border-radius:var(--r);font-size:12px;background:var(--bg);color:var(--text);outline:none}
-.summary-row{display:flex;gap:6px;margin-bottom:10px;flex-wrap:wrap}
-.pill{background:var(--surface);border:0.5px solid var(--border);border-radius:20px;padding:3px 11px;font-size:12px;color:var(--muted)}
-.pill b{color:var(--text);font-weight:500}
-.prog-wrap{height:4px;background:var(--surface);border-radius:2px;margin-bottom:12px;overflow:hidden}
-.prog-fill{height:100%;background:var(--accent);border-radius:2px;transition:width 0.3s}
-.aisle-sec{margin-bottom:14px}
+.sticky-hdr{position:sticky;top:0;background:var(--bg);z-index:10;padding:8px 0 6px;margin-bottom:6px;border-bottom:0.5px solid var(--bd)}
+.list-actions{display:flex;gap:6px;flex-wrap:wrap;align-items:center}
+.fsel{padding:6px 9px;border:0.5px solid var(--bdm);border-radius:var(--r);font-size:12px;background:var(--bg);color:var(--tx);outline:none}
+.summary-row{display:flex;gap:6px;margin-bottom:9px;flex-wrap:wrap}
+.pill{background:var(--sf);border:0.5px solid var(--bd);border-radius:20px;padding:3px 10px;font-size:12px;color:var(--mu)}
+.pill b{color:var(--tx);font-weight:500}
+.prog-wrap{height:4px;background:var(--sf);border-radius:2px;margin-bottom:11px;overflow:hidden}
+.prog-fill{height:100%;background:var(--ac);border-radius:2px;transition:width 0.3s}
+.aisle-sec{margin-bottom:13px}
 .aisle-hdr{display:flex;align-items:center;gap:6px;margin-bottom:5px}
 .aisle-badge{background:var(--al);border:0.5px solid rgba(29,158,117,0.3);border-radius:5px;padding:2px 8px;font-size:11px;font-weight:600;color:var(--ad)}
-.shop-item{display:flex;align-items:center;gap:10px;padding:10px 12px;background:var(--bg);border:0.5px solid var(--border);border-radius:var(--r);margin-bottom:4px}
+.shop-item{display:flex;align-items:center;gap:9px;padding:10px 12px;background:var(--bg);border:0.5px solid var(--bd);border-radius:var(--r);margin-bottom:4px}
 .shop-item.done{opacity:0.4}
 .shop-item.done .iname{text-decoration:line-through}
-.chk{width:20px;height:20px;border:2px solid var(--border-md);border-radius:5px;flex-shrink:0;display:flex;align-items:center;justify-content:center;cursor:pointer;transition:all 0.15s}
-.chk.on{background:var(--accent);border-color:var(--accent)}
+.chk{width:20px;height:20px;border:2px solid var(--bdm);border-radius:5px;flex-shrink:0;display:flex;align-items:center;justify-content:center;cursor:pointer;transition:all 0.15s}
+.chk.on{background:var(--ac);border-color:var(--ac)}
 .chk.on::after{content:'';display:block;width:10px;height:6px;border-left:2.5px solid #fff;border-bottom:2.5px solid #fff;transform:rotate(-45deg) translate(1px,-1px)}
 .iname{flex:1;font-size:14px}
-.iamt{font-size:13px;color:var(--muted);font-weight:500;white-space:nowrap}
-.isrc{font-size:11px;color:var(--hint);margin-left:2px}
+.iamt{font-size:13px;color:var(--mu);font-weight:500;white-space:nowrap}
 
 /* Store bar */
-.store-bar{display:flex;align-items:center;gap:8px;background:var(--al);border:0.5px solid rgba(29,158,117,0.25);border-radius:var(--r);padding:9px 13px;margin-bottom:14px;cursor:pointer}
-.store-name{flex:1;font-size:13px;font-weight:500;color:var(--ad)}
-.store-addr{font-size:11px;color:var(--accent);font-weight:400}
+.store-bar{display:flex;align-items:center;gap:8px;background:var(--al);border:0.5px solid rgba(29,158,117,0.25);border-radius:var(--r);padding:9px 13px;margin-bottom:12px;cursor:pointer}
+.store-nm{flex:1;font-size:13px;font-weight:500;color:var(--ad)}
+.store-ad{font-size:11px;color:var(--ac)}
 
-/* Modals / sheets */
+/* Generate bar (bottom sticky) */
+.gen-bar{position:sticky;bottom:0;background:var(--bg);border-top:0.5px solid var(--bd);padding:10px 14px calc(10px + env(safe-area-inset-bottom,0));display:flex;align-items:center;gap:10px}
+.gen-bar-txt{font-size:13px;color:var(--mu);flex:1}
+.gen-bar-txt b{color:var(--tx)}
+
+/* Overlays & sheets */
 .overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.5);z-index:100;align-items:flex-end;justify-content:center}
 .overlay.open{display:flex}
-.sheet{background:var(--bg);border-radius:20px 20px 0 0;width:100%;max-width:600px;max-height:92vh;overflow-y:auto;padding:0 0 env(safe-area-inset-bottom,16px)}
-.sheet-handle{width:36px;height:4px;background:var(--border-md);border-radius:2px;margin:12px auto 14px}
-.sheet-head{padding:0 18px 12px;display:flex;align-items:center;justify-content:space-between;border-bottom:0.5px solid var(--border)}
+.sheet{background:var(--bg);border-radius:20px 20px 0 0;width:100%;max-width:600px;max-height:92vh;overflow-y:auto;padding-bottom:env(safe-area-inset-bottom,16px)}
+.sheet-handle{width:36px;height:4px;background:var(--bdm);border-radius:2px;margin:12px auto 13px}
+.sheet-head{padding:0 18px 11px;display:flex;align-items:center;justify-content:space-between;border-bottom:0.5px solid var(--bd)}
 .sheet-head h2{font-size:17px;font-weight:600}
-.sheet-body{padding:16px 18px}
-.sheet-foot{padding:12px 18px;border-top:0.5px solid var(--border);display:flex;gap:8px;justify-content:flex-end}
-.confirm-sheet{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.5);z-index:200;align-items:flex-end;justify-content:center}
-.confirm-sheet.open{display:flex}
+.sheet-body{padding:15px 18px}
+.sheet-foot{padding:11px 18px;border-top:0.5px solid var(--bd);display:flex;gap:8px;justify-content:flex-end}
+.confirm-wrap{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.5);z-index:200;align-items:flex-end;justify-content:center}
+.confirm-wrap.open{display:flex}
 .confirm-box{background:var(--bg);border-radius:20px 20px 0 0;width:100%;max-width:600px;padding:20px 20px calc(20px + env(safe-area-inset-bottom,0))}
 .confirm-box h3{font-size:17px;font-weight:600;margin-bottom:8px}
-.confirm-box p{font-size:14px;color:var(--muted);margin-bottom:18px;line-height:1.5}
-
-/* Generate bar */
-.generate-bar{position:sticky;bottom:0;background:var(--bg);border-top:0.5px solid var(--border);padding:12px 14px calc(12px + env(safe-area-inset-bottom,0));display:flex;align-items:center;gap:10px}
-.selected-count{font-size:13px;color:var(--muted);flex:1}
-.selected-count b{color:var(--text)}
+.confirm-box p{font-size:14px;color:var(--mu);margin-bottom:16px;line-height:1.5}
+.qty-row{display:flex;align-items:center;gap:10px;padding:10px 0;border-bottom:0.5px solid var(--bd)}
+.qty-row:last-child{border-bottom:none}
+.qty-name{flex:1;font-size:14px}
+.qty-amt{width:70px;padding:7px 9px;border:0.5px solid var(--bdm);border-radius:var(--r);font-size:14px;background:var(--bg);color:var(--tx);outline:none;text-align:center}
+.qty-unit{width:90px;padding:7px 9px;border:0.5px solid var(--bdm);border-radius:var(--r);font-size:13px;background:var(--bg);color:var(--tx);outline:none;-webkit-appearance:none}
+@media print{
+  body{background:white;padding:0}
+  #app{height:auto;box-shadow:none}
+  #topbar,#bottom-nav,.sticky-hdr,.store-bar,.gen-bar,.no-print{display:none!important}
+  .shop-item{border:none;border-bottom:0.5px solid #eee;border-radius:0;padding:5px 2px}
+  .chk{display:none}
+  .aisle-sec{page-break-inside:avoid}
+}
 </style>
 </head>
 <body>
@@ -142,64 +165,49 @@ textarea{resize:none;line-height:1.5}
   <div id="topbar">
     <div id="topbar-inner">
       <h1>Meal Planner</h1>
-      <div id="sync-indicator">
-        <div id="sync-dot"></div>
-        <span id="sync-msg">Loading...</span>
-      </div>
+      <div id="sync-indicator"><div id="sync-dot"></div><span id="sync-msg">Loading...</span></div>
     </div>
   </div>
 
   <div id="content">
-    <!-- ADD RECIPE TAB -->
+    <!-- ADD TAB -->
     <div id="pane-add">
       <div class="field"><label>Recipe name</label><input type="text" id="rcp-name" placeholder="e.g. Lemon Garlic Chicken Pasta"></div>
-      <div class="field"><label>Ingredients <span style="font-weight:400;color:var(--hint)">(paste from recipe page)</span></label><textarea id="rcp-text" rows="5" placeholder="Paste ingredient list here..."></textarea></div>
+      <div class="field"><label>Ingredients <span style="font-weight:400;color:var(--hi)">(paste from recipe page)</span></label><textarea id="rcp-text" rows="5" placeholder="Paste ingredient list here..."></textarea></div>
       <div class="grid-2">
-        <div class="field"><label>Main</label>
-          <select id="rcp-main"><option value="">Select...</option><option>Chicken</option><option>Beef</option><option>Pork</option><option>Seafood</option><option>Turkey</option><option>Lamb</option><option>Vegetarian</option><option>Other</option></select>
-        </div>
-        <div class="field"><label>Side</label>
-          <select id="rcp-side"><option value="">Select...</option><option>Pasta</option><option>Rice</option><option>Potatoes</option><option>Vegetables</option><option>Salad</option><option>Bread</option><option>Soup</option><option>Other</option></select>
-        </div>
-        <div class="field"><label>Cook method</label>
-          <select id="rcp-method"><option value="">Select...</option><option>Crockpot</option><option>Stovetop</option><option>Oven</option><option>Instant Pot</option><option>Grill</option><option>Air Fryer</option><option>No Cook</option><option>Other</option></select>
-        </div>
-        <div class="field"><label>Cuisine</label>
-          <select id="rcp-cuisine"><option value="">Select...</option><option>Italian</option><option>Mexican</option><option>Asian</option><option>American</option><option>Mediterranean</option><option>Southern</option><option>Other</option></select>
-        </div>
-        <div class="field"><label>Servings</label>
-          <select id="rcp-servings"><option value="">Select...</option><option>2</option><option>4</option><option>6</option><option>8</option><option>10+</option></select>
-        </div>
-        <div class="field"><label>Occasion</label>
-          <select id="rcp-occasion"><option value="">Select...</option><option>Everyday</option><option>Weekend</option><option>Company</option><option>Holiday</option><option>Other</option></select>
-        </div>
-        <div class="field"><label>Prep time</label>
-          <select id="rcp-prep"><option value="">Select...</option><option>10 min</option><option>20 min</option><option>30 min</option><option>40 min</option><option>50 min</option><option>60 min</option><option>Other</option></select>
-        </div>
-        <div class="field"><label>Cook time</label>
-          <select id="rcp-cook"><option value="">Select...</option><option>10 min</option><option>20 min</option><option>30 min</option><option>40 min</option><option>50 min</option><option>60 min</option><option>2 hr</option><option>3 hr</option><option>4 hr</option><option>5 hr</option><option>6 hr</option><option>7 hr</option><option>8 hr</option><option>Other</option></select>
-        </div>
+        <div class="field"><label>Main</label><select id="rcp-main"><option value="">—</option><option>Chicken</option><option>Beef</option><option>Pork</option><option>Seafood</option><option>Turkey</option><option>Lamb</option><option>Vegetarian</option><option>Other</option></select></div>
+        <div class="field"><label>Side</label><select id="rcp-side"><option value="">—</option><option>Pasta</option><option>Rice</option><option>Potatoes</option><option>Vegetables</option><option>Salad</option><option>Bread</option><option>Soup</option><option>Other</option></select></div>
+        <div class="field"><label>Cook method</label><select id="rcp-method"><option value="">—</option><option>Crockpot</option><option>Stovetop</option><option>Oven</option><option>Instant Pot</option><option>Grill</option><option>Air Fryer</option><option>No Cook</option><option>Other</option></select></div>
+        <div class="field"><label>Cuisine</label><select id="rcp-cuisine"><option value="">—</option><option>Italian</option><option>Mexican</option><option>Asian</option><option>American</option><option>Mediterranean</option><option>Southern</option><option>Other</option></select></div>
+        <div class="field"><label>Servings</label><select id="rcp-servings"><option value="">—</option><option>2</option><option>4</option><option>6</option><option>8</option><option>10+</option></select></div>
+        <div class="field"><label>Occasion</label><select id="rcp-occasion"><option value="">—</option><option>Everyday</option><option>Weekend</option><option>Company</option><option>Holiday</option><option>Other</option></select></div>
+        <div class="field"><label>Prep time</label><select id="rcp-prep"><option value="">—</option><option>10 min</option><option>20 min</option><option>30 min</option><option>40 min</option><option>50 min</option><option>60 min</option><option>Other</option></select></div>
+        <div class="field"><label>Cook time</label><select id="rcp-cook"><option value="">—</option><option>10 min</option><option>20 min</option><option>30 min</option><option>40 min</option><option>50 min</option><option>60 min</option><option>2 hr</option><option>3 hr</option><option>4 hr</option><option>5 hr</option><option>6 hr</option><option>7 hr</option><option>8 hr</option><option>Other</option></select></div>
       </div>
-      <div class="field"><label>Notes <span style="font-weight:400;color:var(--hint)">(substitutions, tips, etc.)</span></label><textarea id="rcp-notes" rows="3" placeholder="e.g. Use rotisserie chicken to save time. Can substitute zucchini for pasta."></textarea></div>
+      <div class="field"><label>Notes <span style="font-weight:400;color:var(--hi)">(substitutions, tips, etc.)</span></label><textarea id="rcp-notes" rows="3" placeholder="e.g. Use rotisserie chicken to save time."></textarea></div>
       <button class="btn primary btn-full" onclick="handleSaveRecipe()"><i class="ti ti-device-floppy" aria-hidden="true"></i>Save to library</button>
     </div>
 
     <!-- LIBRARY TAB -->
     <div id="pane-library" style="display:none">
-      <div id="lib-filters" style="margin-bottom:10px"></div>
+      <div id="lib-filterbar" class="filter-bar"></div>
       <div id="lib-list"></div>
-      <div style="height:80px"></div>
+      <div style="height:70px"></div>
     </div>
 
-    <!-- SHOPPING LIST TAB -->
+    <!-- EXTRAS TAB -->
+    <div id="pane-extras" style="display:none">
+      <div id="extras-filterbar" class="filter-bar"></div>
+      <div id="extras-list"></div>
+      <div style="height:70px"></div>
+    </div>
+
+    <!-- LIST TAB -->
     <div id="pane-list" style="display:none">
       <div class="store-bar" onclick="openStoreModal()">
-        <i class="ti ti-building-store" style="font-size:16px;color:var(--accent)" aria-hidden="true"></i>
-        <div style="flex:1;min-width:0">
-          <div class="store-name" id="store-name-display">H-E-B Market at Gosling</div>
-          <div class="store-addr" id="store-addr-display">5251 FM 2920, Spring TX 77388</div>
-        </div>
-        <i class="ti ti-pencil" style="font-size:14px;color:var(--accent)" aria-hidden="true"></i>
+        <i class="ti ti-building-store" style="font-size:15px;color:var(--ac)" aria-hidden="true"></i>
+        <div style="flex:1;min-width:0"><div class="store-nm" id="store-name-display">H-E-B Market at Gosling</div><div class="store-ad" id="store-addr-display">5251 FM 2920, Spring TX 77388</div></div>
+        <i class="ti ti-pencil" style="font-size:13px;color:var(--ac)" aria-hidden="true"></i>
       </div>
       <div id="list-pane-inner"></div>
     </div>
@@ -208,43 +216,8 @@ textarea{resize:none;line-height:1.5}
   <div id="bottom-nav">
     <button class="nav-btn active" id="nav-add" onclick="showTab('add')"><i class="ti ti-plus" aria-hidden="true"></i>Add</button>
     <button class="nav-btn" id="nav-library" onclick="showTab('library')"><i class="ti ti-books" aria-hidden="true"></i>Library</button>
+    <button class="nav-btn" id="nav-extras" onclick="showTab('extras')"><i class="ti ti-basket" aria-hidden="true"></i>Extras</button>
     <button class="nav-btn" id="nav-list" onclick="showTab('list')"><i class="ti ti-shopping-cart" aria-hidden="true"></i>List</button>
-  </div>
-</div>
-
-<!-- Generate confirm -->
-<div class="confirm-sheet" id="gen-confirm">
-  <div class="confirm-box">
-    <h3>Replace shopping list?</h3>
-    <p id="gen-confirm-msg">This will replace the current shopping list with ingredients from the selected recipes.</p>
-    <div style="display:flex;gap:8px">
-      <button class="btn primary" style="flex:1;justify-content:center" onclick="doGenerate()"><i class="ti ti-sparkles" aria-hidden="true"></i>Generate list</button>
-      <button class="btn" style="flex:1;justify-content:center" onclick="cancelGenerate()">Cancel</button>
-    </div>
-  </div>
-</div>
-
-<!-- Clear confirm -->
-<div class="confirm-sheet" id="clear-confirm">
-  <div class="confirm-box">
-    <h3>Clear shopping list?</h3>
-    <p>This removes the current shopping list for both of you.</p>
-    <div style="display:flex;gap:8px">
-      <button class="btn danger" style="flex:1;justify-content:center" onclick="doClear()"><i class="ti ti-trash" aria-hidden="true"></i>Clear list</button>
-      <button class="btn" style="flex:1;justify-content:center" onclick="document.getElementById('clear-confirm').classList.remove('open')">Cancel</button>
-    </div>
-  </div>
-</div>
-
-<!-- Delete recipe confirm -->
-<div class="confirm-sheet" id="del-confirm">
-  <div class="confirm-box">
-    <h3>Delete recipe?</h3>
-    <p id="del-confirm-msg">This will permanently remove this recipe from the library.</p>
-    <div style="display:flex;gap:8px">
-      <button class="btn danger" style="flex:1;justify-content:center" onclick="doDeleteRecipe()"><i class="ti ti-trash" aria-hidden="true"></i>Delete</button>
-      <button class="btn" style="flex:1;justify-content:center" onclick="document.getElementById('del-confirm').classList.remove('open')">Cancel</button>
-    </div>
   </div>
 </div>
 
@@ -252,25 +225,48 @@ textarea{resize:none;line-height:1.5}
 <div class="overlay" id="edit-sheet">
   <div class="sheet">
     <div class="sheet-handle"></div>
-    <div class="sheet-head"><h2>Edit recipe</h2><button class="btn sm" onclick="closeEditSheet()"><i class="ti ti-x" aria-hidden="true"></i></button></div>
+    <div class="sheet-head"><h2 id="edit-sheet-title">Edit recipe</h2><button class="btn sm" onclick="closeEditSheet()"><i class="ti ti-x" aria-hidden="true"></i></button></div>
+    <div class="sheet-body" id="edit-sheet-body"></div>
+    <div class="sheet-foot" id="edit-sheet-foot"></div>
+  </div>
+</div>
+
+<!-- Add extra item sheet -->
+<div class="overlay" id="add-extra-sheet">
+  <div class="sheet">
+    <div class="sheet-handle"></div>
+    <div class="sheet-head"><h2>Add item</h2><button class="btn sm" onclick="closeAddExtraSheet()"><i class="ti ti-x" aria-hidden="true"></i></button></div>
     <div class="sheet-body">
-      <div class="field"><label>Recipe name</label><input type="text" id="edit-name"></div>
-      <div class="field"><label>Ingredients</label><textarea id="edit-ingr" rows="6"></textarea></div>
-      <div class="grid-2">
-        <div class="field"><label>Main</label><select id="edit-main"><option value="">Select...</option><option>Chicken</option><option>Beef</option><option>Pork</option><option>Seafood</option><option>Turkey</option><option>Lamb</option><option>Vegetarian</option><option>Other</option></select></div>
-        <div class="field"><label>Side</label><select id="edit-side"><option value="">Select...</option><option>Pasta</option><option>Rice</option><option>Potatoes</option><option>Vegetables</option><option>Salad</option><option>Bread</option><option>Soup</option><option>Other</option></select></div>
-        <div class="field"><label>Cook method</label><select id="edit-method"><option value="">Select...</option><option>Crockpot</option><option>Stovetop</option><option>Oven</option><option>Instant Pot</option><option>Grill</option><option>Air Fryer</option><option>No Cook</option><option>Other</option></select></div>
-        <div class="field"><label>Cuisine</label><select id="edit-cuisine"><option value="">Select...</option><option>Italian</option><option>Mexican</option><option>Asian</option><option>American</option><option>Mediterranean</option><option>Southern</option><option>Other</option></select></div>
-        <div class="field"><label>Servings</label><select id="edit-servings"><option value="">Select...</option><option>2</option><option>4</option><option>6</option><option>8</option><option>10+</option></select></div>
-        <div class="field"><label>Occasion</label><select id="edit-occasion"><option value="">Select...</option><option>Everyday</option><option>Weekend</option><option>Company</option><option>Holiday</option><option>Other</option></select></div>
-        <div class="field"><label>Prep time</label><select id="edit-prep"><option value="">Select...</option><option>10 min</option><option>20 min</option><option>30 min</option><option>40 min</option><option>50 min</option><option>60 min</option><option>Other</option></select></div>
-        <div class="field"><label>Cook time</label><select id="edit-cook"><option value="">Select...</option><option>10 min</option><option>20 min</option><option>30 min</option><option>40 min</option><option>50 min</option><option>60 min</option><option>2 hr</option><option>3 hr</option><option>4 hr</option><option>5 hr</option><option>6 hr</option><option>7 hr</option><option>8 hr</option><option>Other</option></select></div>
+      <div class="field"><label>Item name</label><input type="text" id="ae-name" placeholder="e.g. Sparkling water"></div>
+      <div class="field"><label>Category</label>
+        <select id="ae-cat">
+          <option value="">— Select —</option>
+          <option>Produce</option><option>Meat</option><option>Seafood</option><option>Dairy</option>
+          <option>Bakery</option><option>Deli</option><option>Frozen</option><option>Beverages</option>
+          <option>Snacks</option><option>Pantry</option><option>Household</option><option>Personal Care</option>
+          <option>Pet Supplies</option><option>Baby</option><option>Other</option>
+        </select>
       </div>
-      <div class="field"><label>Notes</label><textarea id="edit-notes" rows="3"></textarea></div>
     </div>
     <div class="sheet-foot">
-      <button class="btn" onclick="closeEditSheet()">Cancel</button>
-      <button class="btn primary" onclick="saveEditRecipe()"><i class="ti ti-device-floppy" aria-hidden="true"></i>Save changes</button>
+      <button class="btn" onclick="closeAddExtraSheet()">Cancel</button>
+      <button class="btn primary" onclick="saveExtraItem()"><i class="ti ti-plus" aria-hidden="true"></i>Add item</button>
+    </div>
+  </div>
+</div>
+
+<!-- Qty entry sheet (extras) -->
+<div class="overlay" id="qty-sheet">
+  <div class="sheet">
+    <div class="sheet-handle"></div>
+    <div class="sheet-head"><h2>Enter quantities</h2><button class="btn sm" onclick="closeQtySheet()"><i class="ti ti-x" aria-hidden="true"></i></button></div>
+    <div class="sheet-body">
+      <p style="font-size:13px;color:var(--mu);margin-bottom:14px">Enter the amount needed for each item.</p>
+      <div id="qty-rows"></div>
+    </div>
+    <div class="sheet-foot">
+      <button class="btn" onclick="closeQtySheet()">Cancel</button>
+      <button class="btn primary" onclick="confirmAddExtras()"><i class="ti ti-check" aria-hidden="true"></i>Add to list</button>
     </div>
   </div>
 </div>
@@ -283,7 +279,6 @@ textarea{resize:none;line-height:1.5}
     <div class="sheet-body">
       <div class="field"><label>Store name</label><input type="text" id="s-name"></div>
       <div class="field"><label>Address</label><input type="text" id="s-addr"></div>
-      <div class="field"><label>Aisle guide <span style="font-weight:400;color:var(--hint)">(optional)</span></label><textarea id="s-ctx" rows="5"></textarea></div>
     </div>
     <div class="sheet-foot">
       <button class="btn" onclick="closeStoreModal()">Cancel</button>
@@ -292,107 +287,197 @@ textarea{resize:none;line-height:1.5}
   </div>
 </div>
 
+<!-- Generate confirm -->
+<div class="confirm-wrap" id="gen-confirm">
+  <div class="confirm-box">
+    <h3>Replace shopping list?</h3>
+    <p id="gen-confirm-msg">This will replace the current list.</p>
+    <div style="display:flex;gap:8px">
+      <button class="btn primary" style="flex:1;justify-content:center" onclick="doGenerate()"><i class="ti ti-sparkles" aria-hidden="true"></i>Generate</button>
+      <button class="btn" style="flex:1;justify-content:center" onclick="closeConfirm('gen-confirm')">Cancel</button>
+    </div>
+  </div>
+</div>
+
+<!-- Clear confirm -->
+<div class="confirm-wrap" id="clear-confirm">
+  <div class="confirm-box">
+    <h3>Clear shopping list?</h3>
+    <p>Removes the current list for both of you.</p>
+    <div style="display:flex;gap:8px">
+      <button class="btn danger" style="flex:1;justify-content:center" onclick="doClear()"><i class="ti ti-trash" aria-hidden="true"></i>Clear</button>
+      <button class="btn" style="flex:1;justify-content:center" onclick="closeConfirm('clear-confirm')">Cancel</button>
+    </div>
+  </div>
+</div>
+
+<!-- Delete confirm -->
+<div class="confirm-wrap" id="del-confirm">
+  <div class="confirm-box">
+    <h3 id="del-title">Delete?</h3>
+    <p id="del-msg">This cannot be undone.</p>
+    <div style="display:flex;gap:8px">
+      <button class="btn danger" style="flex:1;justify-content:center" onclick="doDelete()"><i class="ti ti-trash" aria-hidden="true"></i>Delete</button>
+      <button class="btn" style="flex:1;justify-content:center" onclick="closeConfirm('del-confirm')">Cancel</button>
+    </div>
+  </div>
+</div>
+
 <script>
 // ── Firebase ──────────────────────────────────────────────────────────────────
-const firebaseConfig = {
-  apiKey: "AIzaSyDa7-t6ZhoUYS131apyyyzjpr2NW3b8sf8",
-  authDomain: "meal-planner-bdcbe.firebaseapp.com",
-  projectId: "meal-planner-bdcbe",
-  storageBucket: "meal-planner-bdcbe.firebasestorage.app",
-  messagingSenderId: "923366938386",
-  appId: "1:923366938386:web:c22935ce625765404845cb"
-};
+const firebaseConfig={apiKey:"AIzaSyDa7-t6ZhoUYS131apyyyzjpr2NW3b8sf8",authDomain:"meal-planner-bdcbe.firebaseapp.com",projectId:"meal-planner-bdcbe",storageBucket:"meal-planner-bdcbe.firebasestorage.app",messagingSenderId:"923366938386",appId:"1:923366938386:web:c22935ce625765404845cb"};
 firebase.initializeApp(firebaseConfig);
-const db = firebase.firestore();
-const RECIPES_COL = db.collection('recipes');
-const LIST_DOC = db.collection('planner').doc('shoppingList');
+const db=firebase.firestore();
+const RECIPES_COL=db.collection('recipes');
+const EXTRAS_COL=db.collection('extras');
+const LIST_DOC=db.collection('planner').doc('shoppingList');
 
 // ── State ─────────────────────────────────────────────────────────────────────
-let library = [];       // all saved recipes from Firebase
-let shoppingList = [];  // {name, ingredients, id} — active list recipes
-let checked = {};       // {ingredientName: bool}
-let selectedIds = new Set(); // checked in library for generation
-let activeFilter = {};  // {category: value}
-let activeRecipes = []; // filter on shopping list
-let currentSort = 'aisle';
-let currentTab = 'add';
-let editingId = null;
-let deletingId = null;
-let pendingMerge = null;
-let userMergeDecisions = {};
+let library=[];
+let extraItems=[];
+let shoppingList=[];
+let additionalItems=[];
+let checked={};
+let selectedRecipeIds=new Set();
+let selectedExtraIds=new Set();
+let libFilter={};
+let extrasFilter='';
+let activeListFilter=[];
+let currentSort='aisle';
+let currentTab='add';
+let editingId=null;
+let deletingId=null;
+let deletingType=null;
+let pendingMerge=null;
+let userMergeDecisions={};
+let openDropdown=null;
+let store={name:'H-E-B Market at Gosling',address:'5251 FM 2920, Spring TX 77388'};
 
-let store = { name:'H-E-B Market at Gosling', address:'5251 FM 2920, Spring TX 77388', aisleCtx:'' };
+// ── Default extras inventory ──────────────────────────────────────────────────
+const DEFAULT_EXTRAS=[
+  // Produce
+  {cat:'Produce',name:'bananas'},{cat:'Produce',name:'apples'},{cat:'Produce',name:'oranges'},
+  {cat:'Produce',name:'grapes'},{cat:'Produce',name:'strawberries'},{cat:'Produce',name:'blueberries'},
+  {cat:'Produce',name:'baby carrots'},{cat:'Produce',name:'celery'},{cat:'Produce',name:'broccoli florets'},
+  {cat:'Produce',name:'salad mix'},{cat:'Produce',name:'avocados'},{cat:'Produce',name:'limes'},
+  {cat:'Produce',name:'lemons'},{cat:'Produce',name:'tomatoes'},{cat:'Produce',name:'cucumber'},
+  // Meat
+  {cat:'Meat',name:'ground beef'},{cat:'Meat',name:'chicken breast'},{cat:'Meat',name:'chicken thighs'},
+  {cat:'Meat',name:'bacon'},{cat:'Meat',name:'pork chops'},{cat:'Meat',name:'hot dogs'},
+  {cat:'Meat',name:'breakfast sausage'},{cat:'Meat',name:'deli turkey'},{cat:'Meat',name:'deli ham'},
+  // Seafood
+  {cat:'Seafood',name:'salmon'},{cat:'Seafood',name:'shrimp'},{cat:'Seafood',name:'tilapia'},
+  {cat:'Seafood',name:'tuna cans'},
+  // Dairy
+  {cat:'Dairy',name:'milk'},{cat:'Dairy',name:'eggs'},{cat:'Dairy',name:'butter'},
+  {cat:'Dairy',name:'shredded cheddar'},{cat:'Dairy',name:'cream cheese'},{cat:'Dairy',name:'sour cream'},
+  {cat:'Dairy',name:'greek yogurt'},{cat:'Dairy',name:'cottage cheese'},{cat:'Dairy',name:'heavy cream'},
+  {cat:'Dairy',name:'parmesan'},{cat:'Dairy',name:'mozzarella'},{cat:'Dairy',name:'American cheese slices'},
+  // Bakery
+  {cat:'Bakery',name:'sandwich bread'},{cat:'Bakery',name:'hamburger buns'},{cat:'Bakery',name:'hot dog buns'},
+  {cat:'Bakery',name:'flour tortillas'},{cat:'Bakery',name:'corn tortillas'},{cat:'Bakery',name:'bagels'},
+  {cat:'Bakery',name:'dinner rolls'},
+  // Pantry
+  {cat:'Pantry',name:'olive oil'},{cat:'Pantry',name:'vegetable oil'},{cat:'Pantry',name:'salt'},
+  {cat:'Pantry',name:'black pepper'},{cat:'Pantry',name:'garlic powder'},{cat:'Pantry',name:'onion powder'},
+  {cat:'Pantry',name:'all-purpose flour'},{cat:'Pantry',name:'sugar'},{cat:'Pantry',name:'brown sugar'},
+  {cat:'Pantry',name:'pasta (dry)'},{cat:'Pantry',name:'white rice'},{cat:'Pantry',name:'chicken broth'},
+  {cat:'Pantry',name:'beef broth'},{cat:'Pantry',name:'canned diced tomatoes'},{cat:'Pantry',name:'tomato paste'},
+  {cat:'Pantry',name:'peanut butter'},{cat:'Pantry',name:'jelly'},{cat:'Pantry',name:'maple syrup'},
+  {cat:'Pantry',name:'honey'},{cat:'Pantry',name:'soy sauce'},{cat:'Pantry',name:'hot sauce'},
+  {cat:'Pantry',name:'ketchup'},{cat:'Pantry',name:'mustard'},{cat:'Pantry',name:'mayonnaise'},
+  {cat:'Pantry',name:'ranch dressing'},{cat:'Pantry',name:'BBQ sauce'},
+  // Frozen
+  {cat:'Frozen',name:'frozen peas'},{cat:'Frozen',name:'frozen corn'},{cat:'Frozen',name:'frozen broccoli'},
+  {cat:'Frozen',name:'frozen mixed vegetables'},{cat:'Frozen',name:'frozen waffles'},
+  {cat:'Frozen',name:'ice cream'},{cat:'Frozen',name:'frozen pizza'},{cat:'Frozen',name:'french fries'},
+  // Beverages
+  {cat:'Beverages',name:'Coke'},{cat:'Beverages',name:'Diet Coke'},{cat:'Beverages',name:'Dr Pepper'},
+  {cat:'Beverages',name:'Sprite'},{cat:'Beverages',name:'sparkling water'},
+  {cat:'Beverages',name:'orange juice'},{cat:'Beverages',name:'apple juice'},
+  {cat:'Beverages',name:'coffee'},{cat:'Beverages',name:'tea bags'},{cat:'Beverages',name:'sports drinks'},
+  {cat:'Beverages',name:'water bottles'},
+  // Snacks
+  {cat:'Snacks',name:'tortilla chips'},{cat:'Snacks',name:'potato chips'},{cat:'Snacks',name:'pretzels'},
+  {cat:'Snacks',name:'crackers'},{cat:'Snacks',name:'mixed nuts'},{cat:'Snacks',name:'popcorn'},
+  {cat:'Snacks',name:'granola bars'},{cat:'Snacks',name:'cookies'},{cat:'Snacks',name:'fruit snacks'},
+  // Household
+  {cat:'Household',name:'paper towels'},{cat:'Household',name:'toilet paper'},{cat:'Household',name:'dish soap'},
+  {cat:'Household',name:'laundry detergent'},{cat:'Household',name:'trash bags'},{cat:'Household',name:'zip lock bags'},
+  {cat:'Household',name:'aluminum foil'},{cat:'Household',name:'plastic wrap'},{cat:'Household',name:'parchment paper'},
+  {cat:'Household',name:'sponges'},{cat:'Household',name:'cleaning spray'},
+  // Personal Care
+  {cat:'Personal Care',name:'shampoo'},{cat:'Personal Care',name:'conditioner'},{cat:'Personal Care',name:'body wash'},
+  {cat:'Personal Care',name:'toothpaste'},{cat:'Personal Care',name:'deodorant'},{cat:'Personal Care',name:'razors'},
+  {cat:'Personal Care',name:'lotion'},{cat:'Personal Care',name:'hand soap'},
+  // Pet Supplies
+  {cat:'Pet Supplies',name:'dog food'},{cat:'Pet Supplies',name:'cat food'},{cat:'Pet Supplies',name:'dog treats'},
+  {cat:'Pet Supplies',name:'cat treats'},{cat:'Pet Supplies',name:'cat litter'},
+  // Baby
+  {cat:'Baby',name:'diapers'},{cat:'Baby',name:'baby wipes'},{cat:'Baby',name:'baby formula'},
+];
 
-// ── Categories ────────────────────────────────────────────────────────────────
-const CATEGORIES = {
-  main:    ['Chicken','Beef','Pork','Seafood','Turkey','Lamb','Vegetarian','Other'],
-  side:    ['Pasta','Rice','Potatoes','Vegetables','Salad','Bread','Soup','Other'],
-  method:  ['Crockpot','Stovetop','Oven','Instant Pot','Grill','Air Fryer','No Cook','Other'],
-  cuisine: ['Italian','Mexican','Asian','American','Mediterranean','Southern','Other'],
-  servings:['2','4','6','8','10+'],
-  occasion:['Everyday','Weekend','Company','Holiday','Other'],
-  prep:    ['10 min','20 min','30 min','40 min','50 min','60 min','Other'],
-  cook:    ['10 min','20 min','30 min','40 min','50 min','60 min','2 hr','3 hr','4 hr','5 hr','6 hr','7 hr','8 hr','Other'],
+const EXTRA_CATS=['Produce','Meat','Seafood','Dairy','Bakery','Frozen','Beverages','Snacks','Pantry','Household','Personal Care','Pet Supplies','Baby','Other'];
+
+// ── Aisle map ─────────────────────────────────────────────────────────────────
+const AISLE_MAP={
+  'produce':['garlic','onion','lemon','lime','tomato','tomatoes','parsley','cilantro','lettuce','spinach','kale','zucchini','eggplant','bell pepper','mushroom','broccoli','cauliflower','carrot','celery','cucumber','avocado','jalapeño','jalapeno','shallot','ginger','green onion','leek','asparagus','corn','green beans','lemon zest','lemon juice','lime juice','baby carrots','salad mix','grapes','apples','bananas','oranges','strawberries','blueberries','peaches'],
+  'meat':['chicken','chicken breast','chicken thighs','beef','steak','ground beef','pork','bacon','sausage','turkey','ground turkey','ham','lamb','prosciutto','pancetta','hot dogs','deli turkey','deli ham','breakfast sausage','pork chops'],
+  'seafood':['salmon','shrimp','tuna','cod','tilapia','halibut','crab','lobster','scallop','clams','mussels'],
+  'dairy':['milk','egg','eggs','egg yolk','egg yolks','butter','parmesan','mozzarella','cheddar','cream cheese','sour cream','yogurt','heavy cream','half and half','ricotta','cottage cheese','cheese','greek yogurt','american cheese'],
+  'bakery':['bread','sandwich bread','tortilla','baguette','roll','rolls','dinner rolls','croissant','pita','naan','bagels','hamburger buns','hot dog buns','flour tortillas','corn tortillas'],
+  'deli':['deli meat','rotisserie','pepperoni','salami'],
+  'frozen':['frozen','edamame','ice cream','french fries','frozen pizza','frozen waffles'],
+  'aisle 4':['olive oil','vinegar','salad dressing','ranch dressing','ketchup','mustard','mayonnaise','mayo','pickle','olives','jam','jelly','peanut butter','honey','bbq sauce','salsa','hot sauce','worcestershire','soy sauce','fish sauce','oyster sauce','sriracha','tahini','capers','maple syrup'],
+  'aisle 5':['pasta','spaghetti','fettuccine','penne','rigatoni','rice','lentils','quinoa','couscous','noodles','ramen','mac and cheese','white rice','pasta (dry)'],
+  'aisle 6':['canned diced tomatoes','tomato paste','tomato sauce','broth','chicken broth','beef broth','vegetable broth','coconut milk','chickpeas','black beans'],
+  'aisle 8':['flour','all-purpose flour','sugar','brown sugar','salt','baking soda','baking powder','oil','vegetable oil','canola oil','pepper','black pepper','red pepper flakes','chili flakes','cumin','paprika','oregano','thyme','rosemary','cinnamon','chili powder','garlic powder','onion powder','cayenne','bay leaves','italian seasoning','cornstarch','breadcrumbs','panko','vanilla','yeast','sesame oil'],
+  'aisle 9':['chips','tortilla chips','potato chips','popcorn','nuts','mixed nuts','pretzels','crackers','granola bars','cookies','fruit snacks'],
+  'aisle 10':['coffee','tea bags','hot cocoa','creamer','juice','orange juice','apple juice','almond milk','oat milk','soy milk','sports drinks'],
+  'aisle 11':['coke','diet coke','dr pepper','sprite','sparkling water','water bottles'],
+  'aisle 25':['paper towels','toilet paper','dish soap','laundry detergent','trash bags','zip lock bags','aluminum foil','plastic wrap','parchment paper','sponges','cleaning spray'],
+  'aisle 26':['shampoo','conditioner','body wash','toothpaste','deodorant','razors','lotion','hand soap'],
+  'aisle 29':['dog food','cat food','dog treats','cat treats','cat litter'],
+  'aisle 31':['diapers','baby wipes','baby formula'],
 };
-const CAT_LABELS = { main:'Main', side:'Side', method:'Method', cuisine:'Cuisine', servings:'Servings', occasion:'Occasion', prep:'Prep', cook:'Cook time' };
 
-// ── Aliases ───────────────────────────────────────────────────────────────────
-const ALIASES = {
+function normName(n){const l=n.toLowerCase().trim();return({
   'black pepper':'pepper','ground black pepper':'pepper','ground pepper':'pepper','freshly ground pepper':'pepper','freshly ground black pepper':'pepper',
-  'sea salt':'salt','kosher salt':'salt','table salt':'salt','coarse salt':'salt','fine salt':'salt',
-  'italian parsley':'parsley','flat-leaf parsley':'parsley','flat leaf parsley':'parsley','fresh parsley':'parsley',
+  'sea salt':'salt','kosher salt':'salt','table salt':'salt','coarse salt':'salt',
+  'italian parsley':'parsley','flat-leaf parsley':'parsley','fresh parsley':'parsley',
   'garlic clove':'garlic','garlic cloves':'garlic',
-  'chicken breasts':'chicken breast','boneless skinless chicken breast':'chicken breast','boneless chicken breast':'chicken breast',
-  'heavy whipping cream':'heavy cream','double cream':'heavy cream',
+  'chicken breasts':'chicken breast','boneless skinless chicken breast':'chicken breast',
+  'heavy whipping cream':'heavy cream',
   'spring onion':'green onion','scallion':'green onion','scallions':'green onion',
-  'parmesan cheese':'parmesan','parmigiano reggiano':'parmesan','parmigiano-reggiano':'parmesan',
+  'parmesan cheese':'parmesan','parmigiano reggiano':'parmesan',
   'dried oregano':'oregano','dried basil':'basil','dried thyme':'thyme','dried rosemary':'rosemary',
   'white onion':'onion','yellow onion':'onion','brown onion':'onion','sweet onion':'onion',
   'unsalted butter':'butter','salted butter':'butter',
   'shredded mozzarella':'mozzarella','shredded mozzarella cheese':'mozzarella',
-  'boneless skinless chicken thighs':'chicken thighs','chicken thigh':'chicken thighs',
-  'lean ground beef':'ground beef','extra lean ground beef':'ground beef',
-};
-function normName(n){ const l=n.toLowerCase().trim(); return ALIASES[l]||l; }
+  'boneless skinless chicken thighs':'chicken thighs',
+  'lean ground beef':'ground beef',
+}[l]||l);}
 
-// ── Aisle map ─────────────────────────────────────────────────────────────────
-const AISLE_MAP = {
-  'produce':['garlic','onion','lemon','lime','tomato','tomatoes','parsley','cilantro','lettuce','spinach','kale','zucchini','eggplant','bell pepper','mushroom','broccoli','cauliflower','carrot','celery','cucumber','avocado','jalapeño','jalapeno','shallot','ginger','green onion','leek','asparagus','corn','green beans','lemon zest','lemon juice','lime juice'],
-  'meat':['chicken','chicken breast','chicken thighs','beef','steak','ground beef','pork','bacon','sausage','turkey','ground turkey','ham','lamb','prosciutto','pancetta'],
-  'seafood':['salmon','shrimp','tuna','cod','tilapia','halibut','crab','lobster','scallop','clams','mussels'],
-  'dairy':['milk','egg','eggs','egg yolk','egg yolks','butter','parmesan','mozzarella','cheddar','cream cheese','sour cream','yogurt','heavy cream','half and half','ricotta','cottage cheese','cheese'],
-  'bakery':['bread','tortilla','baguette','roll','croissant','pita','naan'],
-  'deli':['deli meat','rotisserie','pepperoni','salami'],
-  'frozen':['frozen','edamame','ice cream'],
-  'aisle 4':['olive oil','vinegar','salad dressing','ketchup','mustard','mayonnaise','mayo','pickle','olives','jam','jelly','peanut butter','honey','bbq sauce','salsa','hot sauce','worcestershire','soy sauce','fish sauce','oyster sauce','sriracha','tahini','capers'],
-  'aisle 5':['pasta','spaghetti','fettuccine','penne','rigatoni','rice','lentils','quinoa','couscous','noodles','ramen','mac and cheese'],
-  'aisle 6':['canned tomatoes','tomato paste','tomato sauce','broth','chicken broth','beef broth','vegetable broth','coconut milk','chickpeas','black beans'],
-  'aisle 8':['flour','sugar','brown sugar','salt','baking soda','baking powder','oil','pepper','red pepper flakes','chili flakes','cumin','paprika','oregano','thyme','rosemary','cinnamon','chili powder','garlic powder','onion powder','cayenne','bay leaves','italian seasoning','cornstarch','breadcrumbs','panko','vanilla','yeast','vegetable oil','canola oil','sesame oil'],
-  'aisle 9':['chips','popcorn','nuts','pretzels','crackers','granola'],
-  'aisle 10':['coffee','tea','hot cocoa','creamer','juice','almond milk','oat milk','soy milk'],
-  'aisle 24':['soda','sparkling water','water'],
-};
 function getAisle(name){
   const l=name.toLowerCase().trim();
-  for(const [a,kws] of Object.entries(AISLE_MAP)){ if(kws.includes(l)) return a; }
-  for(const [a,kws] of Object.entries(AISLE_MAP)){ if(kws.some(k=>(k.includes(' ')&&l.includes(k))||(l.includes(' ')&&k.includes(l)))) return a; }
+  for(const [a,kws] of Object.entries(AISLE_MAP)){if(kws.includes(l))return a;}
+  for(const [a,kws] of Object.entries(AISLE_MAP)){if(kws.some(k=>(k.includes(' ')&&l.includes(k))||(l.includes(' ')&&k.includes(l))))return a;}
   return 'other';
 }
 
-// ── Fractions ─────────────────────────────────────────────────────────────────
 function toFraction(n){
-  if(!n||isNaN(n)) return '';
+  if(!n||isNaN(n))return '';
   const whole=Math.floor(n),frac=n-whole;
   const fracs=[[1,2],[1,3],[2,3],[1,4],[3,4],[1,6],[5,6],[1,8],[3,8],[5,8],[7,8]];
   let fs='';
-  for(const [a,b] of fracs){ if(Math.abs(frac-a/b)<0.04){fs=a+'/'+b;break;} }
-  if(!fs&&frac>0.04) return n%1===0?String(n):n.toFixed(1).replace(/\.0$/,'');
-  if(whole===0) return fs||String(n);
+  for(const [a,b] of fracs){if(Math.abs(frac-a/b)<0.04){fs=a+'/'+b;break;}}
+  if(!fs&&frac>0.04)return n%1===0?String(n):n.toFixed(1).replace(/\.0$/,'');
+  if(whole===0)return fs||String(n);
   return fs?whole+' '+fs:String(whole);
 }
 function fmtAmt(amt,unit){
-  if(!amt) return unit||'';
-  if(String(amt).includes('+')) return amt+(unit?' '+unit:'');
+  if(!amt)return unit||'';
+  if(String(amt).includes('+'))return amt+(unit?' '+unit:'');
   const n=parseFloat(amt);
   return isNaN(n)?amt:(unit?toFraction(n)+' '+unit:toFraction(n));
 }
@@ -404,177 +489,171 @@ function parseIngredients(text){
   const fracMap=[['½','1/2'],['⅓','1/3'],['⅔','2/3'],['¼','1/4'],['¾','3/4'],['⅛','1/8'],['⅜','3/8'],['⅝','5/8'],['⅞','7/8'],['⅙','1/6'],['⅚','5/6']];
   const units=['tablespoon','tablespoons','tbsp','teaspoon','teaspoons','tsp','cup','cups','ounce','ounces','oz','pound','pounds','lb','lbs','gram','grams','g','kg','ml','liter','liters','l','slice','slices','clove','cloves','piece','pieces','can','cans','package','packages','pkg','bunch','bunches','sprig','sprigs','stalk','stalks','head','heads','inch','inches','strip','strips','jar','jars','bag','bags'];
   const unitRx=new RegExp('^('+units.join('|')+')[s.]?\\b','i');
-  const stopWords=/^(ingredients|for the|directions|instructions|notes|servings|serves|prep|cook|total|yield|equipment|method|steps)/i;
+  const stop=/^(ingredients|for the|directions|instructions|notes|servings|serves|prep|cook|total|yield|equipment|method|steps)/i;
   for(let line of lines){
     line=line.replace(/^[^a-zA-Z0-9½⅓⅔¼¾⅛⅜⅝⅞⅙⅚\d]+/,'').replace(/\*+/g,'').trim();
-    if(!line||line.length<2||stopWords.test(line)) continue;
-    for(const [sym,val] of fracMap) line=line.split(sym).join(val);
+    if(!line||line.length<2||stop.test(line))continue;
+    for(const [s,v] of fracMap)line=line.split(s).join(v);
     line=line.replace(/(\d)(1\/2|1\/3|1\/4|3\/4|2\/3|1\/8|3\/8|5\/8|7\/8)/,'$1 $2');
     let amount=null,unit=null;
-    const numRx=/^((\d+)\s+(\d+)\/(\d+)|(\d+)\/(\d+)|(\d*\.?\d+))\s*/;
-    const nm=line.match(numRx);
+    const nm=line.match(/^((\d+)\s+(\d+)\/(\d+)|(\d+)\/(\d+)|(\d*\.?\d+))\s*/);
     if(nm){
-      if(nm[2]&&nm[3]&&nm[4]) amount=parseFloat(nm[2])+parseFloat(nm[3])/parseFloat(nm[4]);
-      else if(nm[5]&&nm[6]) amount=parseFloat(nm[5])/parseFloat(nm[6]);
+      if(nm[2]&&nm[3]&&nm[4])amount=parseFloat(nm[2])+parseFloat(nm[3])/parseFloat(nm[4]);
+      else if(nm[5]&&nm[6])amount=parseFloat(nm[5])/parseFloat(nm[6]);
       else amount=parseFloat(nm[7]);
       line=line.slice(nm[0].length).trim();
     }
     const um=line.match(unitRx);
-    if(um){ unit=um[1].toLowerCase().replace(/s$/,'').replace(/\.$/,''); line=line.slice(um[0].length).trim(); }
+    if(um){unit=um[1].toLowerCase().replace(/s$/,'').replace(/\.$/,'');line=line.slice(um[0].length).trim();}
     line=line.replace(/^[.\s]+/,'').trim();
-    let name=line
-      .replace(/\s*\([^)]*\)\s*/g,' ')
-      .replace(/,.*$/,'').replace(/;.*$/,'')
-      .replace(/\s*-\s*(cooked|drained|thawed|rinsed|diced|sliced|chopped|minced|grated|shredded|softened|melted|to taste.*).*$/i,'')
-      .replace(/\s+(cooked|drained|thawed|rinsed|according to.*|to taste).*$/i,'')
+    let name=line.replace(/\s*\([^)]*\)\s*/g,' ').replace(/,.*$/,'').replace(/;.*$/,'')
+      .replace(/\s*-\s*(cooked|drained|thawed|rinsed|to taste.*).*$/i,'')
+      .replace(/\s+(cooked|drained|thawed|according to.*|to taste).*$/i,'')
       .replace(/\s{2,}/g,' ').trim().toLowerCase();
     name=name.replace(/^of\s+/i,'').trim();
     const adjRx=/^(fresh|dried|frozen|canned|cooked|raw|large|medium|small|extra-large|extra large|extra|finely|roughly|thinly|chopped|minced|sliced|diced|grated|shredded|boneless|skinless|lean|whole|ground|uncooked|dry|prepared|halved|quartered|peeled|seeded|trimmed|divided|optional|packed)\s+/gi;
-    let prev='';
-    while(prev!==name){ prev=name; name=name.replace(adjRx,'').trim(); }
-    name=name.replace(/\s+(ragu|rao'?s?|newman'?s?|prego|hunts|heinz|kraft|hellmann'?s?|barilla|ronzoni|classico|bertolli|campbells|progresso|swanson|kikkoman|lawry|mccormick|frank|tabasco|cholula|tapatio)(\s.*)?$/i,'');
-    const nameWords=name.split(' ');
-    const orIdx=nameWords.indexOf('or');
-    if(orIdx!==-1&&nameWords.length>orIdx+2) name=nameWords.slice(0,orIdx+2).join(' ');
-    else if(nameWords.length>5) name=nameWords.slice(0,5).join(' ');
-    if(!name||name.length<2) continue;
+    let prev='';while(prev!==name){prev=name;name=name.replace(adjRx,'').trim();}
+    name=name.replace(/\s+(ragu|rao'?s?|newman'?s?|prego|hunts|heinz|kraft|hellmann'?s?|barilla|ronzoni|classico|bertolli|campbells|progresso)(\s.*)?$/i,'');
+    const nw=name.split(' ');
+    const oi=nw.indexOf('or');
+    if(oi!==-1&&nw.length>oi+2)name=nw.slice(0,oi+2).join(' ');
+    else if(nw.length>5)name=nw.slice(0,5).join(' ');
+    if(!name||name.length<2)continue;
     name=normName(name);
     results.push({name,amount,unit,aisle:getAisle(name)});
   }
   return results;
 }
 
-// ── Merge ingredients ─────────────────────────────────────────────────────────
-function mergeIngredients(recipeList){
+// ── Merge ─────────────────────────────────────────────────────────────────────
+function mergeIngredients(list){
   const map={};
-  recipeList.forEach(({id,title,ingredients})=>{
-    if(!ingredients) return;
+  list.forEach(({id,title,ingredients})=>{
+    if(!ingredients)return;
     ingredients.forEach(ing=>{
-      const key=ing.name;
-      if(!map[key]) map[key]={name:key,amounts:[],unit:ing.unit||'',aisle:ing.aisle||'other',sources:[]};
-      if(ing.amount) map[key].amounts.push({val:ing.amount,unit:ing.unit||''});
-      if(!map[key].unit&&ing.unit) map[key].unit=ing.unit;
-      if(!map[key].sources.find(s=>s.id===id)) map[key].sources.push({id,name:title});
+      const k=ing.name;
+      if(!map[k])map[k]={name:k,amounts:[],unit:ing.unit||'',aisle:ing.aisle||'other',sources:[]};
+      if(ing.amount)map[k].amounts.push({val:ing.amount,unit:ing.unit||''});
+      if(!map[k].unit&&ing.unit)map[k].unit=ing.unit;
+      if(!map[k].sources.find(s=>s.id===id))map[k].sources.push({id,name:title});
     });
   });
   return Object.values(map).map(item=>{
-    const byUnit={};
-    item.amounts.forEach(({val,unit})=>{const u=unit||item.unit||'';byUnit[u]=(byUnit[u]||0)+val;});
-    const entries=Object.entries(byUnit);
-    let displayAmt='',displayUnit=item.unit||'';
-    if(entries.length===1){const[u,total]=entries[0];displayUnit=u;displayAmt=String(parseFloat(total.toFixed(4)));}
-    else if(entries.length>1){displayAmt=entries.map(([u,t])=>{const a=toFraction(parseFloat(t.toFixed(4)));return u?a+' '+u:a;}).join(' + ');displayUnit='';}
-    return{...item,displayAmt,displayUnit};
+    const bu={};
+    item.amounts.forEach(({val,unit})=>{const u=unit||item.unit||'';bu[u]=(bu[u]||0)+val;});
+    const en=Object.entries(bu);
+    let dA='',dU=item.unit||'';
+    if(en.length===1){const[u,t]=en[0];dU=u;dA=String(parseFloat(t.toFixed(4)));}
+    else if(en.length>1){dA=en.map(([u,t])=>{const a=toFraction(parseFloat(t.toFixed(4)));return u?a+' '+u:a;}).join(' + ');dU='';}
+    return{...item,displayAmt:dA,displayUnit:dU};
   });
 }
 
-// ── Fuzzy duplicates ──────────────────────────────────────────────────────────
+// ── Fuzzy dupes ───────────────────────────────────────────────────────────────
 function findFuzzyDuplicates(names){
   const pairs=[],seen=new Set();
-  for(let i=0;i<names.length;i++){
-    for(let j=i+1;j<names.length;j++){
-      const a=names[i],b=names[j];
-      if(a===b) continue;
-      const key=[a,b].sort().join('|');
-      if(seen.has(key)||userMergeDecisions[key]!==undefined) continue;
-      const aw=a.split(' '),bw=b.split(' ');
-      const aInB=aw.every(w=>b.includes(w)),bInA=bw.every(w=>a.includes(w));
-      const shared=aw.filter(w=>bw.includes(w));
-      if((aInB||bInA||shared.length>=Math.min(aw.length,bw.length))&&Math.abs(aw.length-bw.length)<=2){
-        seen.add(key);pairs.push({a,b,key});
-      }
-    }
+  for(let i=0;i<names.length;i++)for(let j=i+1;j<names.length;j++){
+    const a=names[i],b=names[j];if(a===b)continue;
+    const k=[a,b].sort().join('|');
+    if(seen.has(k)||userMergeDecisions[k]!==undefined)continue;
+    const aw=a.split(' '),bw=b.split(' ');
+    const aInB=aw.every(w=>b.includes(w)),bInA=bw.every(w=>a.includes(w));
+    const sh=aw.filter(w=>bw.includes(w));
+    if((aInB||bInA||sh.length>=Math.min(aw.length,bw.length))&&Math.abs(aw.length-bw.length)<=2){seen.add(k);pairs.push({a,b,key:k});}
   }
   return pairs;
 }
 
 // ── Sync status ───────────────────────────────────────────────────────────────
 function setSyncStatus(state,msg){
-  const dot=document.getElementById('sync-dot');
-  const txt=document.getElementById('sync-msg');
-  dot.className=state==='saving'?'saving':state==='error'?'error':'';
-  txt.textContent=msg;
+  document.getElementById('sync-dot').className=state==='saving'?'saving':state==='error'?'error':'';
+  document.getElementById('sync-msg').textContent=msg;
 }
 
-// ── Firebase ops ──────────────────────────────────────────────────────────────
-async function saveRecipeToFirebase(recipe){
+// ── Firebase ──────────────────────────────────────────────────────────────────
+async function saveRecipe(r){
   setSyncStatus('saving','Saving...');
-  try{
-    await RECIPES_COL.doc(recipe.id).set(recipe);
-    setSyncStatus('ok','Saved');
-  }catch(e){
-    console.error(e);
-    setSyncStatus('error','Save failed');
-  }
+  try{await RECIPES_COL.doc(r.id).set(r);setSyncStatus('ok','Saved');}
+  catch(e){console.error(e);setSyncStatus('error','Save failed');}
 }
-
-async function deleteRecipeFromFirebase(id){
+async function deleteRecipe(id){
   setSyncStatus('saving','Deleting...');
-  try{
-    await RECIPES_COL.doc(id).delete();
-    setSyncStatus('ok','Deleted');
-  }catch(e){
-    setSyncStatus('error','Delete failed');
-  }
+  try{await RECIPES_COL.doc(id).delete();setSyncStatus('ok','Deleted');}
+  catch(e){setSyncStatus('error','Delete failed');}
 }
-
-async function saveListToFirebase(){
+async function saveExtra(e){
+  setSyncStatus('saving','Saving...');
+  try{await EXTRAS_COL.doc(e.id).set(e);setSyncStatus('ok','Saved');}
+  catch(e2){setSyncStatus('error','Save failed');}
+}
+async function deleteExtra(id){
+  try{await EXTRAS_COL.doc(id).delete();setSyncStatus('ok','Deleted');}
+  catch(e){setSyncStatus('error','Delete failed');}
+}
+async function saveList(){
   setSyncStatus('saving','Syncing...');
   try{
-    await LIST_DOC.set({
-      shoppingList:JSON.stringify(shoppingList),
-      checked:JSON.stringify(checked),
-      updatedAt:firebase.firestore.FieldValue.serverTimestamp()
-    });
+    await LIST_DOC.set({shoppingList:JSON.stringify(shoppingList),additionalItems:JSON.stringify(additionalItems),checked:JSON.stringify(checked),updatedAt:firebase.firestore.FieldValue.serverTimestamp()});
     setSyncStatus('ok','Synced');
-    localStorage.setItem('mp-checked',JSON.stringify(checked));
-  }catch(e){
-    console.error(e);
-    setSyncStatus('error','Sync failed');
-  }
+    try{localStorage.setItem('mp-checked',JSON.stringify(checked));}catch(e){}
+  }catch(e){console.error(e);setSyncStatus('error','Sync failed');}
 }
 
-function startRealtimeListeners(){
-  // Listen for recipe library changes
+function startListeners(){
   RECIPES_COL.onSnapshot(snap=>{
-    library=[];
-    snap.forEach(doc=>library.push(doc.data()));
+    library=[];snap.forEach(d=>library.push(d.data()));
     library.sort((a,b)=>a.title.localeCompare(b.title));
-    if(currentTab==='library') renderLibrary();
-  },err=>console.error('Library listener:',err));
+    if(currentTab==='library')renderLibrary();
+  },e=>console.error(e));
 
-  // Listen for shopping list changes
+  EXTRAS_COL.onSnapshot(snap=>{
+    extraItems=[];snap.forEach(d=>extraItems.push(d.data()));
+    extraItems.sort((a,b)=>a.cat.localeCompare(b.cat)||a.name.localeCompare(b.name));
+    if(currentTab==='extras')renderExtras();
+  },e=>console.error(e));
+
   LIST_DOC.onSnapshot(snap=>{
-    if(!snap.exists) return;
+    if(!snap.exists)return;
     const data=snap.data();
     try{
-      const newList=JSON.parse(data.shoppingList||'[]');
-      const newChecked=JSON.parse(data.checked||'{}');
-      if(JSON.stringify(newList)!==JSON.stringify(shoppingList)||JSON.stringify(newChecked)!==JSON.stringify(checked)){
-        shoppingList=newList;
-        checked=newChecked;
-        localStorage.setItem('mp-checked',JSON.stringify(checked));
-        if(currentTab==='list') renderList();
+      const nl=JSON.parse(data.shoppingList||'[]');
+      const na=JSON.parse(data.additionalItems||'[]');
+      const nc=JSON.parse(data.checked||'{}');
+      if(JSON.stringify(nl)!==JSON.stringify(shoppingList)||JSON.stringify(na)!==JSON.stringify(additionalItems)||JSON.stringify(nc)!==JSON.stringify(checked)){
+        shoppingList=nl;additionalItems=na;checked=nc;
+        try{localStorage.setItem('mp-checked',JSON.stringify(checked));}catch(e){}
+        if(currentTab==='list')renderList();
         setSyncStatus('ok','Synced');
       }
     }catch(e){console.error(e);}
-  },err=>console.error('List listener:',err));
+  },e=>console.error(e));
+}
+
+// ── Seed extras to Firebase if empty ─────────────────────────────────────────
+async function seedExtrasIfEmpty(){
+  const snap=await EXTRAS_COL.limit(1).get();
+  if(snap.empty){
+    const batch=db.batch();
+    DEFAULT_EXTRAS.forEach(item=>{
+      const id='e'+Date.now().toString(36)+Math.random().toString(36).slice(2,5);
+      batch.set(EXTRAS_COL.doc(id),{...item,id,aisle:getAisle(item.name)});
+    });
+    await batch.commit();
+    console.log('Extras seeded');
+  }
 }
 
 // ── Save recipe ───────────────────────────────────────────────────────────────
 function handleSaveRecipe(){
   const name=document.getElementById('rcp-name').value.trim();
   const text=document.getElementById('rcp-text').value.trim();
-  if(!name){alert('Please enter a recipe name.');return;}
-  if(!text){alert('Please paste the ingredient list.');return;}
+  if(!name){alert('Enter a recipe name.');return;}
+  if(!text){alert('Paste the ingredient list.');return;}
   const ingredients=parseIngredients(text);
   if(!ingredients.length){alert('No ingredients found — check the format.');return;}
-
   const recipe={
-    id:Date.now().toString(36)+Math.random().toString(36).slice(2,6),
-    title:name,
-    ingredients,
-    rawText:text,
+    id:Date.now().toString(36)+Math.random().toString(36).slice(2,5),
+    title:name,ingredients,rawText:text,
     main:document.getElementById('rcp-main').value,
     side:document.getElementById('rcp-side').value,
     method:document.getElementById('rcp-method').value,
@@ -586,191 +665,326 @@ function handleSaveRecipe(){
     notes:document.getElementById('rcp-notes').value.trim(),
     addedAt:new Date().toLocaleDateString()
   };
-
-  // Check for fuzzy dupes against library
-  const existingNames=[...new Set(library.flatMap(r=>r.ingredients.map(i=>i.name)))];
+  const existNames=[...new Set(library.flatMap(r=>r.ingredients.map(i=>i.name)))];
   const newNames=ingredients.map(i=>i.name);
-  const pairs=findFuzzyDuplicates([...new Set([...existingNames,...newNames])]);
-
-  if(pairs.length>0){
-    pendingMerge={recipe,pairs,decisions:{}};
-    openMergeSheet(pairs);
-  }else{
-    finalizeSaveRecipe(recipe);
-  }
-
+  const pairs=findFuzzyDuplicates([...new Set([...existNames,...newNames])]);
+  if(pairs.length>0){pendingMerge={recipe,pairs,decisions:{}};openMergeSheet(pairs);}
+  else finalizeSave(recipe);
   ['rcp-name','rcp-text','rcp-notes'].forEach(id=>document.getElementById(id).value='');
   ['rcp-main','rcp-side','rcp-method','rcp-cuisine','rcp-servings','rcp-occasion','rcp-prep','rcp-cook'].forEach(id=>document.getElementById(id).value='');
 }
-
-function finalizeSaveRecipe(recipe){
-  saveRecipeToFirebase(recipe);
-  showTab('library');
-}
+function finalizeSave(r){saveRecipe(r);showTab('library');}
 
 // ── Merge sheet ───────────────────────────────────────────────────────────────
 function openMergeSheet(pairs){
-  let html='<p style="font-size:13px;color:var(--muted);margin-bottom:14px">These ingredients look similar. Should they be combined?</p>';
-  pairs.forEach((pair,idx)=>{
-    html+=`<div style="background:var(--surface);border-radius:var(--r);padding:12px;margin-bottom:10px;border:0.5px solid var(--border)">
-      <div style="display:flex;align-items:center;gap:8px;margin-bottom:10px;flex-wrap:wrap">
-        <span style="background:var(--al);color:var(--ad);border-radius:4px;padding:2px 8px;font-size:13px;font-weight:500">${pair.a}</span>
-        <span style="color:var(--hint)">+</span>
-        <span style="background:var(--al);color:var(--ad);border-radius:4px;padding:2px 8px;font-size:13px;font-weight:500">${pair.b}</span>
+  document.getElementById('edit-sheet-title').textContent='Review similar ingredients';
+  let html='<p style="font-size:13px;color:var(--mu);margin-bottom:12px">These look similar. Should they be combined on your shopping list?</p>';
+  pairs.forEach((p,i)=>{
+    html+=`<div style="background:var(--sf);border-radius:var(--r);padding:11px;margin-bottom:9px;border:0.5px solid var(--bd)">
+      <div style="display:flex;align-items:center;gap:7px;margin-bottom:9px;flex-wrap:wrap">
+        <span style="background:var(--al);color:var(--ad);border-radius:4px;padding:2px 8px;font-size:13px;font-weight:500">${p.a}</span>
+        <span style="color:var(--hi)">+</span>
+        <span style="background:var(--al);color:var(--ad);border-radius:4px;padding:2px 8px;font-size:13px;font-weight:500">${p.b}</span>
       </div>
-      <div style="display:flex;gap:7px">
-        <button class="btn sm" id="myes-${idx}" onclick="decideMerge(${idx},'${pair.key}',true)"><i class="ti ti-check" aria-hidden="true"></i>Combine</button>
-        <button class="btn sm" id="mno-${idx}" onclick="decideMerge(${idx},'${pair.key}',false)"><i class="ti ti-x" aria-hidden="true"></i>Keep separate</button>
-      </div>
-    </div>`;
+      <div style="display:flex;gap:6px">
+        <button class="btn sm" id="myes-${i}" onclick="decideMerge(${i},'${p.key}',true)"><i class="ti ti-check" aria-hidden="true"></i>Combine</button>
+        <button class="btn sm" id="mno-${i}" onclick="decideMerge(${i},'${p.key}',false)"><i class="ti ti-x" aria-hidden="true"></i>Keep separate</button>
+      </div></div>`;
   });
-  html+=`<div style="margin-top:14px"><button class="btn primary btn-full" id="merge-done-btn" onclick="confirmMerge()" disabled><i class="ti ti-device-floppy" aria-hidden="true"></i>Save recipe</button></div>`;
-
-  // Reuse edit sheet for merge
-  document.querySelector('#edit-sheet .sheet-head h2').textContent='Review similar ingredients';
-  document.querySelector('#edit-sheet .sheet-body').innerHTML=html;
-  document.querySelector('#edit-sheet .sheet-foot').style.display='none';
+  document.getElementById('edit-sheet-body').innerHTML=html;
+  document.getElementById('edit-sheet-foot').innerHTML=`<button class="btn" onclick="closeEditSheet()">Cancel</button><button class="btn primary" id="merge-done-btn" onclick="confirmMerge()" disabled><i class="ti ti-device-floppy" aria-hidden="true"></i>Save recipe</button>`;
   document.getElementById('edit-sheet').classList.add('open');
 }
-
-function decideMerge(idx,key,merge){
+function decideMerge(i,key,merge){
   pendingMerge.decisions[key]=merge;
-  document.getElementById('myes-'+idx).className='btn sm'+(merge?' primary':'');
-  document.getElementById('mno-'+idx).className='btn sm'+(!merge?' primary':'');
-  const allDone=pendingMerge.pairs.every(p=>pendingMerge.decisions[p.key]!==undefined);
-  document.getElementById('merge-done-btn').disabled=!allDone;
+  document.getElementById('myes-'+i).className='btn sm'+(merge?' primary':'');
+  document.getElementById('mno-'+i).className='btn sm'+(!merge?' primary':'');
+  document.getElementById('merge-done-btn').disabled=!pendingMerge.pairs.every(p=>pendingMerge.decisions[p.key]!==undefined);
 }
-
 function confirmMerge(){
   Object.assign(userMergeDecisions,pendingMerge.decisions);
-  const recipe=pendingMerge.recipe;
-  recipe.ingredients=recipe.ingredients.map(ing=>{
+  const r=pendingMerge.recipe;
+  r.ingredients=r.ingredients.map(ing=>{
     const l=ing.name.toLowerCase();
-    for(const [key,merge] of Object.entries(pendingMerge.decisions)){
-      if(!merge) continue;
-      const [a,b]=key.split('|');
-      if(l===a||l===b) return{...ing,name:a.length<=b.length?a:b};
-    }
-    return ing;
+    for(const[k,merge] of Object.entries(pendingMerge.decisions)){
+      if(!merge)continue;const[a,b]=k.split('|');
+      if(l===a||l===b)return{...ing,name:a.length<=b.length?a:b};
+    }return ing;
   });
-  document.getElementById('edit-sheet').classList.remove('open');
-  document.querySelector('#edit-sheet .sheet-foot').style.display='';
-  pendingMerge=null;
-  finalizeSaveRecipe(recipe);
+  closeEditSheet();pendingMerge=null;finalizeSave(r);
 }
+function closeEditSheet(){document.getElementById('edit-sheet').classList.remove('open');editingId=null;pendingMerge=null;}
 
 // ── Edit recipe ───────────────────────────────────────────────────────────────
 function openEditSheet(id){
-  const r=library.find(x=>x.id===id);
-  if(!r) return;
-  editingId=id;
-  document.querySelector('#edit-sheet .sheet-head h2').textContent='Edit recipe';
-  document.querySelector('#edit-sheet .sheet-foot').style.display='';
-  document.getElementById('edit-name').value=r.title||'';
-  // Reconstruct ingredient text from stored ingredients
-  const ingrText=(r.rawText)||r.ingredients.map(i=>{
-    const amt=i.amount?toFraction(i.amount)+(i.unit?' '+i.unit:''):'';
-    return(amt?amt+' ':'')+i.name;
-  }).join('\n');
-  document.getElementById('edit-ingr').value=ingrText;
-  ['main','side','method','cuisine','servings','occasion','prep','cook'].forEach(cat=>{
-    const el=document.getElementById('edit-'+cat);
-    if(el) el.value=r[cat]||'';
+  const r=library.find(x=>x.id===id);if(!r)return;editingId=id;
+  document.getElementById('edit-sheet-title').textContent='Edit recipe';
+  const ingrText=r.rawText||r.ingredients.map(i=>{const a=i.amount?toFraction(i.amount)+(i.unit?' '+i.unit:''):'';return(a?a+' ':'')+i.name;}).join('\n');
+  const cats=[['main','Main'],['side','Side'],['method','Cook method'],['cuisine','Cuisine'],['servings','Servings'],['occasion','Occasion'],['prep','Prep time'],['cook','Cook time']];
+  const opts={main:['','Chicken','Beef','Pork','Seafood','Turkey','Lamb','Vegetarian','Other'],side:['','Pasta','Rice','Potatoes','Vegetables','Salad','Bread','Soup','Other'],method:['','Crockpot','Stovetop','Oven','Instant Pot','Grill','Air Fryer','No Cook','Other'],cuisine:['','Italian','Mexican','Asian','American','Mediterranean','Southern','Other'],servings:['','2','4','6','8','10+'],occasion:['','Everyday','Weekend','Company','Holiday','Other'],prep:['','10 min','20 min','30 min','40 min','50 min','60 min','Other'],cook:['','10 min','20 min','30 min','40 min','50 min','60 min','2 hr','3 hr','4 hr','5 hr','6 hr','7 hr','8 hr','Other']};
+  let html=`<div class="field"><label>Recipe name</label><input type="text" id="edit-name" value="${r.title||''}"></div>`;
+  html+=`<div class="field"><label>Ingredients</label><textarea id="edit-ingr" rows="6">${ingrText}</textarea></div>`;
+  html+='<div class="grid-2">';
+  cats.forEach(([cat,lbl])=>{
+    html+=`<div class="field"><label>${lbl}</label><select id="edit-${cat}">${opts[cat].map(o=>`<option${o===r[cat]?' selected':''}>${o}</option>`).join('')}</select></div>`;
   });
-  document.getElementById('edit-notes').value=r.notes||'';
+  html+='</div>';
+  html+=`<div class="field"><label>Notes</label><textarea id="edit-notes" rows="3">${r.notes||''}</textarea></div>`;
+  document.getElementById('edit-sheet-body').innerHTML=html;
+  document.getElementById('edit-sheet-foot').innerHTML=`<button class="btn" onclick="closeEditSheet()">Cancel</button><button class="btn primary" onclick="saveEditRecipe()"><i class="ti ti-device-floppy" aria-hidden="true"></i>Save</button>`;
   document.getElementById('edit-sheet').classList.add('open');
 }
-
-function closeEditSheet(){
-  document.getElementById('edit-sheet').classList.remove('open');
-  document.querySelector('#edit-sheet .sheet-foot').style.display='';
-  editingId=null;
-  pendingMerge=null;
-}
-
 async function saveEditRecipe(){
-  const r=library.find(x=>x.id===editingId);
-  if(!r) return;
+  const r=library.find(x=>x.id===editingId);if(!r)return;
   const newText=document.getElementById('edit-ingr').value.trim();
-  const ingredients=parseIngredients(newText);
-  const updated={
-    ...r,
-    title:document.getElementById('edit-name').value.trim()||r.title,
-    ingredients,
-    rawText:newText,
-    main:document.getElementById('edit-main').value,
-    side:document.getElementById('edit-side').value,
-    method:document.getElementById('edit-method').value,
-    cuisine:document.getElementById('edit-cuisine').value,
-    servings:document.getElementById('edit-servings').value,
-    occasion:document.getElementById('edit-occasion').value,
-    prep:document.getElementById('edit-prep').value,
-    cook:document.getElementById('edit-cook').value,
-    notes:document.getElementById('edit-notes').value.trim(),
-  };
-  closeEditSheet();
-  await saveRecipeToFirebase(updated);
-  // If this recipe is in the active shopping list, update it there too
+  const updated={...r,title:document.getElementById('edit-name').value.trim()||r.title,ingredients:parseIngredients(newText),rawText:newText,
+    main:document.getElementById('edit-main').value,side:document.getElementById('edit-side').value,
+    method:document.getElementById('edit-method').value,cuisine:document.getElementById('edit-cuisine').value,
+    servings:document.getElementById('edit-servings').value,occasion:document.getElementById('edit-occasion').value,
+    prep:document.getElementById('edit-prep').value,cook:document.getElementById('edit-cook').value,
+    notes:document.getElementById('edit-notes').value.trim()};
+  closeEditSheet();await saveRecipe(updated);
   if(shoppingList.find(x=>x.id===editingId)){
     shoppingList=shoppingList.map(x=>x.id===updated.id?{id:updated.id,title:updated.title,ingredients:updated.ingredients}:x);
-    await saveListToFirebase();
+    await saveList();
   }
 }
 
-// ── Delete recipe ─────────────────────────────────────────────────────────────
-function confirmDeleteRecipe(id){
-  const r=library.find(x=>x.id===id);
-  deletingId=id;
-  document.getElementById('del-confirm-msg').textContent=`This will permanently remove "${r?r.title:'this recipe'}" from the library.`;
+// ── Delete ────────────────────────────────────────────────────────────────────
+function confirmDelete(id,type){
+  deletingId=id;deletingType=type;
+  const name=type==='recipe'?library.find(x=>x.id===id)?.title:extraItems.find(x=>x.id===id)?.name;
+  document.getElementById('del-title').textContent=type==='recipe'?'Delete recipe?':'Delete item?';
+  document.getElementById('del-msg').textContent=`This will permanently remove "${name||'this item'}".`;
   document.getElementById('del-confirm').classList.add('open');
 }
+async function doDelete(){
+  closeConfirm('del-confirm');
+  if(deletingType==='recipe'){await deleteRecipe(deletingId);selectedRecipeIds.delete(deletingId);}
+  else{await deleteExtra(deletingId);selectedExtraIds.delete(deletingId);}
+  deletingId=null;deletingType=null;
+}
+function closeConfirm(id){document.getElementById(id).classList.remove('open');}
 
-async function doDeleteRecipe(){
-  document.getElementById('del-confirm').classList.remove('open');
-  await deleteRecipeFromFirebase(deletingId);
-  selectedIds.delete(deletingId);
-  deletingId=null;
+// ── Dropdown filter logic ─────────────────────────────────────────────────────
+function closeAllDropdowns(){
+  document.querySelectorAll('.dropdown-menu.open').forEach(m=>m.classList.remove('open'));
+  openDropdown=null;
+}
+document.addEventListener('click',e=>{
+  if(!e.target.closest('.dropdown-wrap'))closeAllDropdowns();
+});
+function toggleDropdown(id){
+  const menu=document.getElementById(id);
+  if(menu.classList.contains('open')){closeAllDropdowns();return;}
+  closeAllDropdowns();
+  menu.classList.add('open');openDropdown=id;
+}
+
+// ── Library render ────────────────────────────────────────────────────────────
+const CAT_LABELS={main:'Main',side:'Side',method:'Method',cuisine:'Cuisine',servings:'Servings',occasion:'Occasion',prep:'Prep',cook:'Cook'};
+
+function renderLibraryFilterBar(){
+  const bar=document.getElementById('lib-filterbar');
+  let html='';
+  const activeCount=Object.values(libFilter).filter(Boolean).length;
+  if(activeCount>0){
+    html+=`<button class="filter-chip active" onclick="libFilter={};renderLibrary()"><i class="ti ti-x" aria-hidden="true"></i>Clear (${activeCount})</button>`;
+  }
+  Object.entries(CAT_LABELS).forEach(([cat,lbl])=>{
+    const vals=[...new Set(library.map(r=>r[cat]).filter(Boolean))];
+    if(!vals.length)return;
+    const active=libFilter[cat];
+    const chipId='dd-lib-'+cat;
+    html+=`<div class="dropdown-wrap">
+      <button class="filter-chip${active?' active':''}" onclick="toggleDropdown('${chipId}')">
+        ${active?active:lbl}<i class="ti ti-chevron-down" aria-hidden="true"></i>
+      </button>
+      <div class="dropdown-menu" id="${chipId}">
+        ${vals.map(v=>`<div class="dropdown-item${libFilter[cat]===v?' selected':''}" onclick="setLibFilter('${cat}','${v}');closeAllDropdowns()">${v}</div>`).join('')}
+      </div>
+    </div>`;
+  });
+  bar.innerHTML=html;
+}
+
+function setLibFilter(cat,val){
+  libFilter[cat]=libFilter[cat]===val?'':val;
+  renderLibrary();
+}
+
+function renderLibrary(){
+  renderLibraryFilterBar();
+  let filtered=library;
+  Object.entries(libFilter).forEach(([cat,val])=>{if(val)filtered=filtered.filter(r=>r[cat]===val);});
+  const listEl=document.getElementById('lib-list');
+  if(!filtered.length){
+    listEl.innerHTML=`<div class="empty"><i class="ti ti-books" aria-hidden="true"></i><p>${library.length===0?'No recipes yet — add your first on the Add tab':'No recipes match the filters'}</p></div>`;
+    removeGenBar('lib-gen-bar');return;
+  }
+  let html='';
+  filtered.forEach(r=>{
+    const sel=selectedRecipeIds.has(r.id);
+    const tags=Object.entries(CAT_LABELS).map(([cat])=>r[cat]).filter(Boolean);
+    html+=`<div class="recipe-card">
+      <div class="rc-head">
+        <div class="rc-check${sel?' on':''}" onclick="toggleSelectRecipe('${r.id}')"></div>
+        <div class="rc-info">
+          <div class="rc-title">${r.title}</div>
+          ${tags.length?`<div class="rc-meta">${tags.map(t=>`<span class="meta-tag">${t}</span>`).join('')}</div>`:''}
+        </div>
+        <div class="rc-actions">
+          <button class="btn sm" onclick="openEditSheet('${r.id}')" aria-label="edit"><i class="ti ti-pencil" aria-hidden="true"></i></button>
+          <button class="btn sm" onclick="confirmDelete('${r.id}','recipe')" aria-label="delete"><i class="ti ti-trash" aria-hidden="true"></i></button>
+        </div>
+      </div>
+      ${r.notes?`<div class="rc-body"><p class="notes-text"><i class="ti ti-notes" aria-hidden="true" style="margin-right:4px;font-size:12px"></i>${r.notes}</p></div>`:''}
+    </div>`;
+  });
+  listEl.innerHTML=html;
+  renderGenBar('lib-gen-bar','pane-library',selectedRecipeIds.size,'recipe');
+}
+
+function toggleSelectRecipe(id){
+  if(selectedRecipeIds.has(id))selectedRecipeIds.delete(id);else selectedRecipeIds.add(id);
+  renderLibrary();
+}
+
+// ── Extras render ─────────────────────────────────────────────────────────────
+function renderExtrasFilterBar(){
+  const bar=document.getElementById('extras-filterbar');
+  let html='';
+  if(extrasFilter){html+=`<button class="filter-chip active" onclick="extrasFilter='';renderExtras()"><i class="ti ti-x" aria-hidden="true"></i>Clear</button>`;}
+  const cats=[...new Set(extraItems.map(i=>i.cat))].sort();
+  const ddId='dd-extras-cat';
+  html+=`<div class="dropdown-wrap">
+    <button class="filter-chip${extrasFilter?' active':''}" onclick="toggleDropdown('${ddId}')">
+      ${extrasFilter||'Category'}<i class="ti ti-chevron-down" aria-hidden="true"></i>
+    </button>
+    <div class="dropdown-menu" id="${ddId}">
+      ${cats.map(c=>`<div class="dropdown-item${extrasFilter===c?' selected':''}" onclick="extrasFilter='${c}';renderExtras();closeAllDropdowns()">${c}</div>`).join('')}
+    </div>
+  </div>`;
+  html+=`<button class="filter-chip" onclick="openAddExtraSheet()" style="margin-left:auto"><i class="ti ti-plus" aria-hidden="true"></i>Add item</button>`;
+  bar.innerHTML=html;
+}
+
+function renderExtras(){
+  renderExtrasFilterBar();
+  let filtered=extraItems;
+  if(extrasFilter)filtered=filtered.filter(i=>i.cat===extrasFilter);
+  const listEl=document.getElementById('extras-list');
+  if(!filtered.length){
+    listEl.innerHTML=`<div class="empty"><i class="ti ti-basket" aria-hidden="true"></i><p>${extraItems.length===0?'Loading items...':'No items match the filter'}</p></div>`;
+    removeGenBar('ext-gen-bar');return;
+  }
+  // Group by category
+  const grouped={};
+  filtered.forEach(item=>{if(!grouped[item.cat])grouped[item.cat]=[];grouped[item.cat].push(item);});
+  let html='';
+  Object.entries(grouped).sort(([a],[b])=>a.localeCompare(b)).forEach(([cat,items])=>{
+    html+=`<div class="aisle-sec"><div class="aisle-hdr"><span class="aisle-badge">${cat}</span><span style="font-size:11px;color:var(--hi)">${items.length}</span></div>`;
+    items.forEach(item=>{
+      const sel=selectedExtraIds.has(item.id);
+      html+=`<div class="extra-item">
+        <div class="rc-check${sel?' on':''}" onclick="toggleSelectExtra('${item.id}')"></div>
+        <span class="iname">${item.name}</span>
+        <button class="btn sm" onclick="confirmDelete('${item.id}','extra')" aria-label="delete" style="border:none;background:transparent;color:var(--hi);padding:4px"><i class="ti ti-x" aria-hidden="true"></i></button>
+      </div>`;
+    });
+    html+='</div>';
+  });
+  listEl.innerHTML=html;
+  renderGenBar('ext-gen-bar','pane-extras',selectedExtraIds.size,'extra');
+}
+
+function toggleSelectExtra(id){
+  if(selectedExtraIds.has(id))selectedExtraIds.delete(id);else selectedExtraIds.add(id);
+  renderExtras();
+}
+
+// ── Add extra item ────────────────────────────────────────────────────────────
+function openAddExtraSheet(){document.getElementById('add-extra-sheet').classList.add('open');}
+function closeAddExtraSheet(){document.getElementById('add-extra-sheet').classList.remove('open');}
+async function saveExtraItem(){
+  const name=document.getElementById('ae-name').value.trim().toLowerCase();
+  const cat=document.getElementById('ae-cat').value;
+  if(!name||!cat){alert('Enter a name and category.');return;}
+  const item={id:'e'+Date.now().toString(36)+Math.random().toString(36).slice(2,5),name,cat,aisle:getAisle(name)};
+  closeAddExtraSheet();
+  document.getElementById('ae-name').value='';document.getElementById('ae-cat').value='';
+  await saveExtra(item);
+}
+
+// ── Qty entry for extras ──────────────────────────────────────────────────────
+const UNITS=['each','oz','lb','g','kg','cup','tbsp','tsp','ml','l','slice','can','bottle','box','bag','bunch','pack','roll'];
+
+function openQtySheet(){
+  if(selectedExtraIds.size===0){alert('Select at least one item first.');return;}
+  const selected=extraItems.filter(i=>selectedExtraIds.has(i.id));
+  let html='';
+  selected.forEach((item,i)=>{
+    html+=`<div class="qty-row">
+      <span class="qty-name">${item.name}</span>
+      <input class="qty-amt" type="number" id="qty-amt-${i}" placeholder="Qty" min="0" step="0.25">
+      <select class="qty-unit" id="qty-unit-${i}">
+        ${UNITS.map(u=>`<option value="${u}">${u}</option>`).join('')}
+      </select>
+    </div>`;
+  });
+  document.getElementById('qty-rows').innerHTML=html;
+  document.getElementById('qty-sheet').classList.add('open');
+}
+function closeQtySheet(){document.getElementById('qty-sheet').classList.remove('open');}
+
+async function confirmAddExtras(){
+  const selected=extraItems.filter(i=>selectedExtraIds.has(i.id));
+  const newItems=selected.map((item,i)=>{
+    const amt=parseFloat(document.getElementById('qty-amt-'+i).value)||null;
+    const unit=document.getElementById('qty-unit-'+i).value;
+    return{name:item.name,aisle:item.aisle||getAisle(item.name),amount:amt,unit:amt?unit:null,cat:item.cat};
+  });
+  additionalItems=[...additionalItems.filter(x=>!newItems.find(n=>n.name===x.name)),...newItems];
+  closeQtySheet();
+  selectedExtraIds.clear();
+  await saveList();
+  showTab('list');
 }
 
 // ── Generate list ─────────────────────────────────────────────────────────────
 function confirmGenerate(){
-  if(selectedIds.size===0){alert('Select at least one recipe from the library first.');return;}
-  const names=library.filter(r=>selectedIds.has(r.id)).map(r=>r.title).join(', ');
-  document.getElementById('gen-confirm-msg').textContent=`Generate a new shopping list from: ${names}?`;
+  if(selectedRecipeIds.size===0){alert('Select at least one recipe first.');return;}
+  const names=library.filter(r=>selectedRecipeIds.has(r.id)).map(r=>r.title).join(', ');
+  document.getElementById('gen-confirm-msg').textContent=`Replace the current shopping list with ingredients from: ${names}?`;
   document.getElementById('gen-confirm').classList.add('open');
 }
-
 async function doGenerate(){
-  document.getElementById('gen-confirm').classList.remove('open');
-  const selected=library.filter(r=>selectedIds.has(r.id));
+  closeConfirm('gen-confirm');
+  const selected=library.filter(r=>selectedRecipeIds.has(r.id));
   shoppingList=selected.map(r=>({id:r.id,title:r.title,ingredients:r.ingredients}));
-  checked={};
-  activeRecipes=[];
-  await saveListToFirebase();
-  showTab('list');
+  additionalItems=[];checked={};activeListFilter=[];
+  await saveList();showTab('list');
 }
+async function doClear(){closeConfirm('clear-confirm');shoppingList=[];additionalItems=[];checked={};await saveList();renderList();}
 
-function cancelGenerate(){document.getElementById('gen-confirm').classList.remove('open');}
-
-async function doClear(){
-  document.getElementById('clear-confirm').classList.remove('open');
-  shoppingList=[];checked={};
-  await saveListToFirebase();
-  renderList();
+// ── Gen bar ───────────────────────────────────────────────────────────────────
+function renderGenBar(barId,paneId,count,type){
+  let bar=document.getElementById(barId);
+  if(!bar){bar=document.createElement('div');bar.id=barId;bar.className='gen-bar';document.getElementById(paneId).appendChild(bar);}
+  const label=type==='recipe'?'recipe':'item';
+  const btnLabel=type==='recipe'?'Generate list':'Add to list';
+  const onclick=type==='recipe'?'confirmGenerate()':'openQtySheet()';
+  bar.innerHTML=`<span class="gen-bar-txt">${count>0?`<b>${count}</b> ${label}${count!==1?'s':''} selected`:`Select ${label}s`}</span>
+    <button class="btn primary" onclick="${onclick}" ${count===0?'disabled':''}><i class="ti ti-sparkles" aria-hidden="true"></i>${btnLabel}</button>`;
 }
+function removeGenBar(id){const b=document.getElementById(id);if(b)b.remove();}
 
 // ── Store ─────────────────────────────────────────────────────────────────────
-function openStoreModal(){
-  document.getElementById('s-name').value=store.name;
-  document.getElementById('s-addr').value=store.address;
-  document.getElementById('s-ctx').value=store.aisleCtx||'';
-  document.getElementById('store-modal').classList.add('open');
-}
+function openStoreModal(){document.getElementById('s-name').value=store.name;document.getElementById('s-addr').value=store.address;document.getElementById('store-modal').classList.add('open');}
 function closeStoreModal(){document.getElementById('store-modal').classList.remove('open');}
 function saveStore(){
   store.name=document.getElementById('s-name').value.trim()||store.name;
   store.address=document.getElementById('s-addr').value.trim()||store.address;
-  store.aisleCtx=document.getElementById('s-ctx').value.trim();
   document.getElementById('store-name-display').textContent=store.name;
   document.getElementById('store-addr-display').textContent=store.address;
   try{localStorage.setItem('mp-store',JSON.stringify(store));}catch(e){}
@@ -780,208 +994,131 @@ function saveStore(){
 // ── Tabs ──────────────────────────────────────────────────────────────────────
 function showTab(t){
   currentTab=t;
-  ['add','library','list'].forEach(id=>{
+  ['add','library','extras','list'].forEach(id=>{
     document.getElementById('pane-'+id).style.display=t===id?'':'none';
     document.getElementById('nav-'+id).className='nav-btn'+(t===id?' active':'');
   });
-  if(t==='library') renderLibrary();
-  if(t==='list') renderList();
+  if(t==='library')renderLibrary();
+  if(t==='extras')renderExtras();
+  if(t==='list')renderList();
 }
 
-// ── Render library ────────────────────────────────────────────────────────────
-function renderLibrary(){
-  // Filter bar
-  const filterBar=document.getElementById('lib-filters');
-  let fhtml='<div style="margin-bottom:8px">';
-  const activeCats=Object.keys(activeFilter).filter(k=>activeFilter[k]);
-  if(activeCats.length>0){
-    fhtml+=`<button class="chip on" style="margin-bottom:6px" onclick="activeFilter={};renderLibrary()"><i class="ti ti-x" aria-hidden="true" style="font-size:11px;margin-right:3px"></i>Clear filters</button> `;
-  }
-  fhtml+='</div>';
-
-  Object.entries(CAT_LABELS).forEach(([cat,label])=>{
-    const vals=[...new Set(library.map(r=>r[cat]).filter(Boolean))];
-    if(vals.length===0) return;
-    fhtml+=`<div style="margin-bottom:8px"><div class="lbl">${label}</div><div class="filter-row">`;
-    vals.forEach(v=>{
-      const on=activeFilter[cat]===v;
-      fhtml+=`<button class="chip${on?' on':''}" onclick="toggleFilter('${cat}','${v}')">${v}</button>`;
-    });
-    fhtml+='</div></div>';
-  });
-  filterBar.innerHTML=fhtml;
-
-  // Filtered list
-  let filtered=library;
-  Object.entries(activeFilter).forEach(([cat,val])=>{
-    if(val) filtered=filtered.filter(r=>r[cat]===val);
-  });
-
-  const listEl=document.getElementById('lib-list');
-  if(!filtered.length){
-    listEl.innerHTML='<div class="empty"><i class="ti ti-books" aria-hidden="true"></i><p>'+(library.length===0?'No recipes yet — add your first recipe on the Add tab':'No recipes match the selected filters')+'</p></div>';
-    removeGenerateBar();
-    return;
-  }
-
-  let html='<div class="section-hdr"><div style="font-size:14px;color:var(--muted)">'+(selectedIds.size>0?`<b style="color:var(--text)">${selectedIds.size}</b> selected`:`${filtered.length} recipe${filtered.length!==1?'s':''}`)+'</div></div>';
-
-  filtered.forEach(r=>{
-    const sel=selectedIds.has(r.id);
-    const tags=Object.entries(CAT_LABELS).map(([cat])=>r[cat]).filter(Boolean);
-    html+=`<div class="recipe-card">
-      <div class="rc-head">
-        <div class="rc-check${sel?' on':''}" onclick="toggleSelect('${r.id}')"></div>
-        <div class="rc-info">
-          <div class="rc-title">${r.title}</div>
-          ${tags.length?`<div class="rc-meta">${tags.map(t=>`<span class="meta-tag">${t}</span>`).join('')}</div>`:''}
-        </div>
-        <div class="rc-actions">
-          <button class="btn sm" onclick="openEditSheet('${r.id}')" aria-label="edit"><i class="ti ti-pencil" aria-hidden="true"></i></button>
-          <button class="btn sm" onclick="confirmDeleteRecipe('${r.id}')" aria-label="delete"><i class="ti ti-trash" aria-hidden="true"></i></button>
-        </div>
-      </div>
-      ${r.notes?`<div class="rc-body"><p class="notes-text"><i class="ti ti-notes" aria-hidden="true" style="margin-right:5px;font-size:13px"></i>${r.notes}</p></div>`:''}
-    </div>`;
-  });
-  listEl.innerHTML=html;
-
-  // Sticky generate bar
-  renderGenerateBar();
-}
-
-function renderGenerateBar(){
-  let bar=document.getElementById('gen-bar');
-  if(!bar){
-    bar=document.createElement('div');
-    bar.id='gen-bar';
-    bar.className='generate-bar';
-    document.getElementById('pane-library').appendChild(bar);
-  }
-  const n=selectedIds.size;
-  bar.innerHTML=`<span class="selected-count">${n>0?`<b>${n}</b> recipe${n!==1?'s':''} selected`:'Select recipes to generate a list'}</span>
-    <button class="btn primary" onclick="confirmGenerate()" ${n===0?'disabled':''}><i class="ti ti-sparkles" aria-hidden="true"></i>Generate list</button>`;
-}
-
-function removeGenerateBar(){
-  const bar=document.getElementById('gen-bar');
-  if(bar) bar.remove();
-}
-
-function toggleSelect(id){
-  if(selectedIds.has(id)) selectedIds.delete(id);
-  else selectedIds.add(id);
-  renderLibrary();
-}
-
-function toggleFilter(cat,val){
-  activeFilter[cat]=activeFilter[cat]===val?'':val;
-  renderLibrary();
-}
-
-// ── Render shopping list ──────────────────────────────────────────────────────
-const AISLE_ORDER=['produce','floral','bakery','deli','seafood','meat','aisle 1','aisle 2','aisle 3','aisle 4','aisle 5','aisle 6','aisle 7','aisle 8','aisle 9','aisle 10','aisle 11','aisle 12','dairy','frozen','other'];
+// ── Shopping list render ──────────────────────────────────────────────────────
+const AISLE_ORDER=['produce','floral','bakery','deli','seafood','meat','aisle 1','aisle 2','aisle 3','aisle 4','aisle 5','aisle 6','aisle 7','aisle 8','aisle 9','aisle 10','aisle 11','aisle 12','dairy','frozen','aisle 25','aisle 26','aisle 29','aisle 31','other'];
 
 function renderList(){
-  const filtered=activeRecipes.length>0?shoppingList.filter(r=>activeRecipes.includes(r.id)):shoppingList;
-  const items=mergeIngredients(filtered.map(r=>({id:r.id,title:r.title,ingredients:r.ingredients})));
-  const checkedN=items.filter(i=>checked[i.name]).length;
-  const total=items.length;
-  const pct=total?Math.round(checkedN/total*100):0;
+  const filteredRecipes=activeListFilter.length>0?shoppingList.filter(r=>activeListFilter.includes(r.id)):shoppingList;
+  const recipeItems=mergeIngredients(filteredRecipes.map(r=>({id:r.id,title:r.title,ingredients:r.ingredients})));
+  const showAdditional=activeListFilter.length===0||activeListFilter.includes('__extras__');
+  const allItems=[...recipeItems];
+  const checkedN=allItems.filter(i=>checked[i.name]).length+(additionalItems.filter(i=>checked['__extra__'+i.name]).length);
+  const total=allItems.length+additionalItems.length;
+  const pct=total?Math.round((checkedN)/total*100):0;
 
   const grouped={};
-  items.forEach(item=>{const k=item.aisle||'other';if(!grouped[k])grouped[k]=[];grouped[k].push(item);});
+  recipeItems.forEach(item=>{const k=item.aisle||'other';if(!grouped[k])grouped[k]=[];grouped[k].push(item);});
   const sortedGroups=Object.entries(grouped).sort(([a],[b])=>{
-    if(currentSort==='alpha') return a.localeCompare(b);
+    if(currentSort==='alpha')return a.localeCompare(b);
     const ai=AISLE_ORDER.indexOf(a),bi=AISLE_ORDER.indexOf(b);
-    if(ai===-1&&bi===-1) return a.localeCompare(b);
-    if(ai===-1) return 1;if(bi===-1) return -1;return ai-bi;
+    if(ai===-1&&bi===-1)return a.localeCompare(b);if(ai===-1)return 1;if(bi===-1)return -1;return ai-bi;
   });
 
-  let html='';
-
-  if(!shoppingList.length){
-    html='<div class="empty"><i class="ti ti-shopping-cart" aria-hidden="true"></i><p>Select recipes in the Library tab<br>and tap Generate List</p></div>';
-    document.getElementById('list-pane-inner').innerHTML=html;
+  if(!shoppingList.length&&!additionalItems.length){
+    document.getElementById('list-pane-inner').innerHTML='<div class="empty"><i class="ti ti-shopping-cart" aria-hidden="true"></i><p>Select recipes in the Library tab<br>and tap Generate List</p></div>';
     return;
   }
 
-  html+='<div class="sticky-actions">';
-  if(shoppingList.length>1){
-    html+='<div style="font-size:11px;font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:0.07em;margin-bottom:7px">Filter by recipe</div>';
-    html+='<div class="filter-row" style="margin-bottom:8px">';
-    html+=`<button class="chip${activeRecipes.length===0?' on':''}" onclick="activeRecipes=[];renderList()">All</button>`;
-    shoppingList.forEach(r=>{
-      html+=`<button class="chip${activeRecipes.includes(r.id)?' on':''}" onclick="toggleListFilter('${r.id}')">${r.title}</button>`;
+  let html='<div class="sticky-hdr">';
+  // Filter chips
+  const allSources=[...shoppingList,additionalItems.length?{id:'__extras__',title:'Additional Items'}:null].filter(Boolean);
+  if(allSources.length>1){
+    html+='<div class="filter-bar" style="margin-bottom:7px">';
+    html+=`<button class="filter-chip${activeListFilter.length===0?' active':''}" onclick="activeListFilter=[];renderList()">All</button>`;
+    allSources.forEach(r=>{
+      html+=`<button class="filter-chip${activeListFilter.includes(r.id)?' active':''}" onclick="toggleListFilter('${r.id}')">${r.title}</button>`;
     });
     html+='</div>';
   }
   html+='<div class="list-actions">';
-  if(checkedN>0) html+=`<button class="btn sm" onclick="checked={};saveListToFirebase();renderList()"><i class="ti ti-refresh" aria-hidden="true"></i>Reset</button>`;
+  if(checkedN>0)html+=`<button class="btn sm" onclick="checked={};saveList();renderList()"><i class="ti ti-refresh" aria-hidden="true"></i>Reset</button>`;
   html+=`<button class="btn sm" onclick="window.print()"><i class="ti ti-printer" aria-hidden="true"></i>Print</button>`;
   html+=`<button class="btn sm" onclick="exportCSV()"><i class="ti ti-download" aria-hidden="true"></i>CSV</button>`;
   html+=`<button class="btn sm danger" onclick="document.getElementById('clear-confirm').classList.add('open')"><i class="ti ti-trash" aria-hidden="true"></i>Clear</button>`;
-  html+=`<select class="fsel" onchange="setSortBy(this.value)"><option value="aisle" ${currentSort==='aisle'?'selected':''}>Store order</option><option value="alpha" ${currentSort==='alpha'?'selected':''}>A–Z</option></select>`;
+  html+=`<select class="fsel" onchange="currentSort=this.value;renderList()"><option value="aisle"${currentSort==='aisle'?' selected':''}>Store order</option><option value="alpha"${currentSort==='alpha'?' selected':''}>A–Z</option></select>`;
   html+='</div></div>';
 
-  html+=`<div class="summary-row"><div class="pill"><b>${total}</b> items</div><div class="pill"><b>${filtered.length}</b> recipe${filtered.length!==1?'s':''}</div>${checkedN>0?`<div class="pill"><b>${checkedN}</b> checked</div>`:''}</div>`;
+  html+=`<div class="summary-row"><div class="pill"><b>${total}</b> items</div><div class="pill"><b>${shoppingList.length}</b> recipe${shoppingList.length!==1?'s':''}</div>${checkedN>0?`<div class="pill"><b>${checkedN}</b> checked</div>`:''}</div>`;
   html+=`<div class="prog-wrap"><div class="prog-fill" style="width:${pct}%"></div></div>`;
 
-  sortedGroups.forEach(([aisle,aisleItems])=>{
-    const label=aisle.replace(/^./,c=>c.toUpperCase()).replace('aisle ','Aisle ');
-    html+=`<div class="aisle-sec"><div class="aisle-hdr"><span class="aisle-badge">${label}</span><span style="font-size:11px;color:var(--hint)">${aisleItems.length} item${aisleItems.length!==1?'s':''}</span></div>`;
-    aisleItems.forEach(item=>{
-      const ck=checked[item.name];
-      const amtStr=fmtAmt(item.displayAmt,item.displayUnit);
+  // Recipe ingredients grouped by aisle
+  if(recipeItems.length>0){
+    sortedGroups.forEach(([aisle,aisleItems])=>{
+      const lbl=aisle.replace(/^./,c=>c.toUpperCase()).replace('aisle ','Aisle ');
+      html+=`<div class="aisle-sec"><div class="aisle-hdr"><span class="aisle-badge">${lbl}</span><span style="font-size:11px;color:var(--hi)">${aisleItems.length}</span></div>`;
+      aisleItems.forEach(item=>{
+        const ck=checked[item.name];
+        const ns=item.name.replace(/'/g,"\\'");
+        html+=`<div class="shop-item${ck?' done':''}">
+          <div class="chk${ck?' on':''}" onclick="toggleCheck('${ns}',false)"></div>
+          <span class="iname">${item.name}</span>
+          ${fmtAmt(item.displayAmt,item.displayUnit)?`<span class="iamt">${fmtAmt(item.displayAmt,item.displayUnit)}</span>`:''}
+          ${item.sources.length>1?`<span style="font-size:11px;color:var(--hi);margin-left:2px">x${item.sources.length}</span>`:''}
+        </div>`;
+      });
+      html+='</div>';
+    });
+  }
+
+  // Additional items section
+  if(showAdditional&&additionalItems.length>0){
+    html+=`<div class="aisle-sec"><div class="aisle-hdr"><span class="aisle-badge" style="background:rgba(100,100,255,0.1);border-color:rgba(100,100,255,0.3);color:#4444cc">Additional Items</span><span style="font-size:11px;color:var(--hi)">${additionalItems.length}</span></div>`;
+    additionalItems.forEach(item=>{
+      const key='__extra__'+item.name;
+      const ck=checked[key];
+      const amtStr=item.amount?fmtAmt(String(item.amount),item.unit):'';
       const ns=item.name.replace(/'/g,"\\'");
       html+=`<div class="shop-item${ck?' done':''}">
-        <div class="chk${ck?' on':''}" onclick="toggleCheck('${ns}')"></div>
+        <div class="chk${ck?' on':''}" onclick="toggleCheck('__extra__${ns}',false)"></div>
         <span class="iname">${item.name}</span>
         ${amtStr?`<span class="iamt">${amtStr}</span>`:''}
-        ${item.sources.length>1?`<span class="isrc" title="${item.sources.map(s=>s.name).join(', ')}">x${item.sources.length}</span>`:''}
       </div>`;
     });
     html+='</div>';
-  });
+  }
 
   document.getElementById('list-pane-inner').innerHTML=html;
 }
 
 function toggleListFilter(id){
-  if(activeRecipes.length===1&&activeRecipes[0]===id) activeRecipes=[];
-  else activeRecipes=[id];
+  if(activeListFilter.length===1&&activeListFilter[0]===id)activeListFilter=[];
+  else activeListFilter=[id];
   renderList();
 }
 
 function toggleCheck(name){
   checked[name]=!checked[name];
-  saveListToFirebase();
-  renderList();
+  saveList();renderList();
 }
 
-function setSortBy(val){ currentSort=val; renderList(); }
-
 function exportCSV(){
-  const filtered=activeRecipes.length>0?shoppingList.filter(r=>activeRecipes.includes(r.id)):shoppingList;
+  const filtered=activeListFilter.length>0?shoppingList.filter(r=>activeListFilter.includes(r.id)):shoppingList;
   const items=mergeIngredients(filtered.map(r=>({id:r.id,title:r.title,ingredients:r.ingredients})));
-  const rows=[['Item','Amount','Unit','Aisle','Recipes']];
+  const rows=[['Item','Amount','Unit','Aisle','Source']];
   items.forEach(it=>rows.push([it.name,it.displayAmt||'',it.displayUnit||'',it.aisle||'',it.sources.map(s=>s.name).join('; ')]));
+  additionalItems.forEach(it=>rows.push([it.name,it.amount||'',it.unit||'',it.aisle||'','Additional Items']));
   const csv=rows.map(r=>r.map(c=>`"${String(c).replace(/"/g,'""')}"`).join(',')).join('\n');
   const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([csv],{type:'text/csv'}));
   a.download='shopping-list.csv';a.click();
 }
 
-// ── SW + Init ─────────────────────────────────────────────────────────────────
-if('serviceWorker' in navigator){ navigator.serviceWorker.register('./sw.js?v=7').catch(()=>{}); }
-
-// Load local store pref
-try{ const s=localStorage.getItem('mp-store'); if(s) Object.assign(store,JSON.parse(s)); }catch(e){}
-try{ const c=localStorage.getItem('mp-checked'); if(c) checked=JSON.parse(c); }catch(e){}
+// ── Init ──────────────────────────────────────────────────────────────────────
+if('serviceWorker' in navigator)navigator.serviceWorker.register('./sw.js?v=8').catch(()=>{});
+try{const s=localStorage.getItem('mp-store');if(s)Object.assign(store,JSON.parse(s));}catch(e){}
+try{const c=localStorage.getItem('mp-checked');if(c)checked=JSON.parse(c);}catch(e){}
 document.getElementById('store-name-display').textContent=store.name;
 document.getElementById('store-addr-display').textContent=store.address;
 setSyncStatus('saving','Connecting...');
-startRealtimeListeners();
-setSyncStatus('ok','Connected');
+seedExtrasIfEmpty().then(()=>{startListeners();setSyncStatus('ok','Connected');}).catch(e=>{console.error(e);startListeners();setSyncStatus('ok','Connected');});
 </script>
 </body>
 </html>
